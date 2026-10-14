@@ -1,0 +1,105 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="cake-detail-page">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'home' %}">Home</a> / 
+        <a href="{% url 'our_cakes' %}">Our Cakes</a> / 
+        <span>{{ cake.name }}</span>
+    </div>
+
+    <div class="cake-detail-layout">
+
+        <!-- Left: Image -->
+        <div class="cake-detail-image">
+            <img src="{% static 'images/' %}{{ cake.image }}" alt="{{ cake.name }}">
+        </div>
+
+        <!-- Right: Info -->
+        <div class="cake-detail-info">
+            <h1>{{ cake.name }}</h1>
+            <p class="cake-description">{{ cake.description }}</p>
+
+            
+            <h4 class="option-label">CHOOSE A SIZE</h4>
+            <div class="size-options">
+                <div class="size-option selected" data-price="0" onclick="selectSize(this)">
+                    <strong>Small (6")</strong>
+                    <span>6-8 guests</span>
+                    <small>+Rs 0</small>
+                </div>
+                <div class="size-option" data-price="200" onclick="selectSize(this)">
+                    <strong>Medium (8")</strong>
+                    <span>10-14 guests</span>
+                    <small>+Rs 200</small>
+                </div>
+                <div class="size-option" data-price="450" onclick="selectSize(this)">
+                    <strong>Large (10")</strong>
+                    <span>16-22 guests</span>
+                    <small>+Rs 450</small>
+                </div>
+                <div class="size-option" data-price="750" onclick="selectSize(this)">
+                    <strong>Extra Large (12")</strong>
+                    <span>24-30 guests</span>
+                    <small>+Rs 750</small>
+                </div>
+            </div>
+
+            <div class="price-estimate">
+                <div>
+                    <p class="option-label">ESTIMATED PRICE</p>
+                    <h2 id="total-price">Rs {{ cake.base_price }}</h2>
+                </div>
+                <p class="small-note">Final price may vary<br>with customisation<br>options</p>
+            </div>
+
+            <a href="#" class="order-btn">Sign Up to Order This Cake</a>
+            <p class="login-note">Already have an account? <a href="#">Log in to order</a></p>
+        </div>
+    </div>
+
+    <!-- Overview Section -->
+    <div class="overview-section">
+        <h3>Overview</h3>
+        <div class="overview-grid">
+            <div class="overview-item">
+                <p class="option-label">PREPARATION TIME</p>
+                <p>Minimum 72 hours notice required</p>
+            </div>
+            <div class="overview-item">
+                <p class="option-label">FULFILMENT</p>
+                <p>Collection or local delivery available</p>
+            </div>
+            <div class="overview-item">
+                <p class="option-label">DIETARY NOTES</p>
+                <p>Please inform us of any allergies at checkout</p>
+            </div>
+        </div>
+        <a href="{% url 'our_cakes' %}" class="back-link">← Back to all cakes</a>
+    </div>
+
+</section>
+
+<script>
+function selectSize(element) {
+    // Remove the 'selected' class from all size options
+    document.querySelectorAll('.size-option').forEach(function(opt) {
+        opt.classList.remove('selected');
+    });
+
+    // Add 'selected' to the one that was clicked
+    element.classList.add('selected');
+
+    // Update the price
+    const basePrice = parseFloat("{{ cake.base_price }}");
+    const extraCost = parseFloat(element.dataset.price);
+    const total = basePrice + extraCost;
+    document.getElementById('total-price').innerText = 'Rs ' + total.toFixed(2);
+}
+</script>
+
+{% endblock %}

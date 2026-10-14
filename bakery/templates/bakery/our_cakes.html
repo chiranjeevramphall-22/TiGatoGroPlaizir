@@ -1,0 +1,36 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="section-label">BROWSE</div>
+    <h1>Our Cakes</h1>
+    <p>Click any cake to see full details and customisation options.</p>
+</section>
+
+<div class="cake-grid">
+    {% for cake in cakes %}
+    <div class="cake-card">
+        <img src="{% static 'images/' %}{{ cake.image }}" alt="{{ cake.name }}">
+        <div class="cake-card-body">
+            <div class="cake-card-header">
+                <h3>{{ cake.name }}</h3>
+                <span class="price">From Rs {{ cake.base_price }}</span>
+            </div>
+            <p>{{ cake.description|truncatechars:90 }}</p>
+            <a href="{% url 'cake_detail' cake.id %}" class="cake-btn">View Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Request Custom Cake Section -->
+<section class="custom-request-section">
+    <p class="section-label" style="color:#d19a7a;">DON'T SEE WHAT YOU'RE AFTER?</p>
+    <h2>Request a Custom Cake</h2>
+    <p>We build fully bespoke cakes to your specifications. Create an account to submit a custom cake request.</p>
+    <a href="#" class="custom-request-btn">Sign Up to Order</a>
+</section>
+
+{% endblock %}

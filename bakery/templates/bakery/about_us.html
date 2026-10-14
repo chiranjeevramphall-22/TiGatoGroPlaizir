@@ -1,0 +1,52 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="about-page">
+
+    <div class="about-layout">
+
+        <!-- Left Column: Text -->
+        <div class="about-text">
+            <p class="section-label">ABOUT US</p>
+            <h1>A family business <br><span class="italic-accent">built on flavour</span></h1>
+            
+            <p class="about-paragraph">
+                Ti Gato Gro Plaizir is a Mauritian cake-making business specialising in the production and sale of cakes for personal occasions. We cater to customers requiring cakes for birthdays, weddings, and other special events.
+            </p>
+            <p class="about-paragraph">
+                We offer a range of standard cake designs prepared from predefined recipes, as well as fully customised cakes built to individual specifications — from flavour and size to decoration and personalised messages.
+            </p>
+
+            <!-- Feature Cards -->
+            <div class="about-features">
+                <div class="feature-card">
+                    <h4>Standard Cakes</h4>
+                    <p>Ready-designed, predefined recipes</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Custom Cakes</h4>
+                    <p>Built to your exact requirements</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Collection</h4>
+                    <p>Pick up from our location</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Delivery</h4>
+                    <p>Available locally on request</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Illustration -->
+        <div class="about-image">
+            <img src="{% static 'images/team-illustration.png' %}" alt="Our Team">
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

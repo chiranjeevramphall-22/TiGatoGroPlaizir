@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ti Gato Gro Plaizir</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- ===== NAVBAR (Shared on all pages) ===== -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{% url 'home' %}">Ti Gato Gro Plaizir</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'our_cakes' %}">Our Cakes</a></li>
+            <li><a href="{% url 'about_us' %}">About Us</a></li>
+            <li><a href="#">Customise</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <button class="admin-btn">Admin</button>
+            <button class="profile-btn">My Profile</button>
+            <button class="login-btn">Log In</button>
+            <button class="signup-btn">Sign Up</button>
+        </div>
+    </nav>
+
+    <!-- ===== PAGE CONTENT (Changes per page) ===== -->
+    {% block content %}
+    <!-- Each page will put its own content here -->
+    {% endblock %}
+
+    <!-- ===== FOOTER (Shared on all pages) ===== -->
+    <footer class="footer">
+        <div class="footer-col">
+            <h3>Ti Gato Gro Plaizir</h3>
+            <p>Artisan cakes for every occasion, baked fresh in Mauritius.</p>
+        </div>
+        <div class="footer-col">
+            <h4>CONTACT</h4>
+            <p>Port Louis, Mauritius</p>
+            <p>TiGatoGrosPlaizir@gmail.com</p>
+            <p>+230 5 1234567</p>
+        </div>
+        <div class="footer-col">
+            <h4>OPENING HOURS</h4>
+            <p>Tue – Fri : 9am – 5pm</p>
+            <p>Saturday : 8am – 3pm</p>
+            <p>Sun – Mon : Closed</p>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Ti Gato Gro Plaizir. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

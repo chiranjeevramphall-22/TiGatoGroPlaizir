@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bakery',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +98,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
 ]
 
 

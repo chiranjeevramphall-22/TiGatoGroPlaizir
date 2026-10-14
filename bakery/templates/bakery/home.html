@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ti Gato Gro Plaizir</title>
-</head>
-<body>
-    <h1>Welcome to Ti Gato Gro Plaizir!</h1>
-    <p>My Home page is officially working.</p>
-</body>
-</html>
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('{% static "images/hero-bg.jpg" %}');">
+        <h2>Handcrafted Cakes Mauritius</h2>
+        <h3>Ti Gato<br><span>Gro Plaizir</span></h3>
+        <p>Artisan cakes baked to order for your birthdays, weddings, and every special occasion in between. Standard designs and fully customized creations.</p>
+        
+        <div class="hero-buttons">
+            <a href="{% url 'our_cakes' %}" class="primary-btn">Browse Our Cakes</a>
+            <a href="#" class="secondary-btn">Create an Account</a>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div>
+            <h4>500+</h4>
+            <p>Cakes Delivered</p>
+        </div>
+        <div>
+            <h4>100%</h4>
+            <p>Natural Ingredients</p>
+        </div>
+        <div>
+            <h4>★ 4.9</h4>
+            <p>Customer Rating</p>
+        </div>
+    </div>
+
+{% endblock %}
