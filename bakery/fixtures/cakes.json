@@ -1,0 +1,62 @@
+[
+{
+    "model": "bakery.cake",
+    "pk": 1,
+    "fields": {
+        "name": "Vanilla Strawberry Cloud",
+        "description": "Light vanilla chiffon layers filled with whipped mascarpone cream and fresh seasonal strawberries. Elegant and refreshing.",
+        "base_price": "980.00",
+        "image": "strawberry-cloud.jpg"
+    }
+},
+{
+    "model": "bakery.cake",
+    "pk": 2,
+    "fields": {
+        "name": "Chocolate Ganache Dream",
+        "description": "Triple-layered dark chocolate sponge with silky ganache filling and hand-tempered chocolate shards on top. A crowd favourite for any celebration.",
+        "base_price": "850.00",
+        "image": "chocolate-ganache.jpg"
+    }
+},
+{
+    "model": "bakery.cake",
+    "pk": 3,
+    "fields": {
+        "name": "Classic Victoria Sponge",
+        "description": "Traditional buttery sponge with house-made strawberry jam and thick clotted cream. Simple, timeless, delicious.",
+        "base_price": "880.00",
+        "image": "victoria-sponge.jpg"
+    }
+},
+{
+    "model": "bakery.cake",
+    "pk": 4,
+    "fields": {
+        "name": "Tropical Fruit Layer",
+        "description": "A celebration of local Mauritian flavours � passion fruit curd, mango compote, and coconut cream between golden sponge layers.",
+        "base_price": "1200.00",
+        "image": "tropical-fruit.jpg"
+    }
+},
+{
+    "model": "bakery.cake",
+    "pk": 5,
+    "fields": {
+        "name": "Floral Garden Cake",
+        "description": "Semi-naked cake adorned with cascading edible flowers, fresh fruit, and a honey-rose buttercream filling.",
+        "base_price": "950.00",
+        "image": "floral-cake.jpg"
+    }
+},
+{
+    "model": "bakery.cake",
+    "pk": 6,
+    "fields": {
+        "name": "Three-Tier Celebration",
+        "description": "A beautiful three-tier celebration cake decorated with fresh strawberries, delicate pink flowers, and elegant white frosting, perfect for weddings and special occasions.",
+        "base_price": "3200.00",
+        "image": "Three-Tier-Celebration.jpg"
+    }
+}
+]
