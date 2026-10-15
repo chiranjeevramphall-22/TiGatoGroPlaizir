@@ -23,8 +23,8 @@
         <div class="auth-buttons">
             <button class="admin-btn">Admin</button>
             <button class="profile-btn">My Profile</button>
-            <button class="login-btn">Log In</button>
-            <button class="signup-btn">Sign Up</button>
+            <a href="{% url 'login' %}" class="login-btn" style="text-decoration:none; display:inline-block;">Log In</a>
+            <a href="{% url 'signup' %}" class="signup-btn" style="text-decoration:none; display:inline-block;">Sign Up</a>
         </div>
     </nav>
 

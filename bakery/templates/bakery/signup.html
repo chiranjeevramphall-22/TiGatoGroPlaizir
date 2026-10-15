@@ -1,0 +1,56 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="auth-page" style="background-image: url('{% static "images/signup-bg.jpg" %}');">
+
+    <div class="auth-card">
+        <p class="section-label">NEW CUSTOMER</p>
+        <h1>Create an Account</h1>
+        <p class="auth-subtitle">Already registered? <a href="{% url 'login' %}">Log in here</a></p>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+
+            <!-- Show any non-field errors (like password mismatch) -->
+            {% if form.non_field_errors %}
+                <div class="error-message">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <label for="id_username">USERNAME</label>
+            <input type="text" name="username" id="id_username" placeholder="Username" required>
+
+            <label for="id_full_name">FULL NAME</label>
+            <input type="text" name="full_name" id="id_full_name" placeholder="Full Name" required>
+
+            <label for="id_email">EMAIL ADDRESS</label>
+            <input type="email" name="email" id="id_email" placeholder="Your Email" required>
+
+            <label for="id_phone_number">PHONE NUMBER</label>
+            <input type="text" name="phone_number" id="id_phone_number" placeholder="+230 5 XXX XXXX">
+
+            <label for="id_delivery_address">DELIVERY ADDRESS</label>
+            <textarea name="delivery_address" id="id_delivery_address" rows="2" placeholder="Port Louis, Mauritius"></textarea>
+
+            <label for="id_password1">PASSWORD</label>
+            <input type="password" name="password1" id="id_password1" placeholder="Min. 8 characters" required>
+
+            <label for="id_password2">CONFIRM PASSWORD</label>
+            <input type="password" name="password2" id="id_password2" placeholder="Repeat your password" required>
+
+            <!-- Password errors (like passwords too short or don't match) -->
+            {% if form.password1.errors or form.password2.errors %}
+                <div class="error-message">
+                    {{ form.password1.errors }}
+                    {{ form.password2.errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="auth-btn">Create Account</button>
+        </form>
+    </div>
+
+</section>
+
+{% endblock %}
