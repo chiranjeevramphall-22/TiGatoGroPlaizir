@@ -785,3 +785,58 @@ body {
     border-color: #c0392b;
     color: #c0392b;
 }
+
+/* Welcome Messages */
+.messages-container {
+    position: fixed;
+    top: 90px;
+    right: 30px;
+    z-index: 1000;
+    max-width: 400px;
+}
+
+.message {
+    padding: 15px 25px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    animation: slideIn 0.4s ease-out;
+}
+
+.message.success {
+    background-color: #2b1d16;
+    color: #f4ead5;
+    border-left: 4px solid #d19a7a;
+}
+
+.message.error {
+    background-color: #fde8e8;
+    color: #c0392b;
+    border-left: 4px solid #c0392b;
+}
+
+.message.info {
+    background-color: #f4ead5;
+    color: #2b1d16;
+    border-left: 4px solid #d19a7a;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Navbar button for logged-in user */
+.navbar .auth-buttons a.profile-btn {
+    background-color: #f4ead5;
+    color: #2b1d16;
+    border: 1px solid #e0d5c5;
+    font-weight: bold;
+}

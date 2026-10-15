@@ -10,8 +10,13 @@
         <p>Artisan cakes baked to order for your birthdays, weddings, and every special occasion in between. Standard designs and fully customized creations.</p>
         
         <div class="hero-buttons">
+            {# --- "Browse Our Cakes" button — always visible --- #}
             <a href="{% url 'our_cakes' %}" class="primary-btn">Browse Our Cakes</a>
-            <a href="#" class="secondary-btn">Create an Account</a>
+
+            {# --- "Create an Account" button — only visible to guests (not logged in) --- #}
+            {% if not user.is_authenticated %}
+            <a href="{% url 'signup' %}" class="secondary-btn">Create an Account</a>
+            {% endif %}
         </div>
     </section>
 
