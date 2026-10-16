@@ -22,42 +22,61 @@ class Profile(models.Model):
 # =====================================================
 # ORDER MODEL
 # Stores every cake order placed by a customer.
+# Can be a standard cake OR a custom-built cake.
 # =====================================================
 class Order(models.Model):
     
     # ---------- STATUS CHOICES ----------
     STATUS_CHOICES = [
-        ('pending', 'Pending'),           # Just placed, awaiting confirmation
-        ('confirmed', 'Confirmed'),       # Admin confirmed
-        ('baking', 'Baking'),             # Being made
-        ('ready', 'Ready for Pickup'),    # Ready
-        ('delivered', 'Delivered'),       # Completed
-        ('cancelled', 'Cancelled'),       # Cancelled
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('baking', 'Baking'),
+        ('ready', 'Ready for Pickup'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
     ]
     
     # ---------- PAYMENT CHOICES ----------
     PAYMENT_CHOICES = [
         ('mcb_juice', 'MCB Juice'),
         ('cod', 'Cash on Delivery'),
+        ('discuss', 'To Be Discussed with Baker'),   # Used for custom orders
     ]
     
     # ---------- RELATIONSHIPS ----------
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)   # Who ordered
-    cake = models.ForeignKey(Cake, on_delete=models.SET_NULL, null=True)  # Which cake
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    cake = models.ForeignKey(Cake, on_delete=models.SET_NULL, null=True, blank=True)  # Can be NULL for custom orders
     
-    # ---------- ORDER DETAILS ----------
-    size = models.CharField(max_length=50, default='Small (6")')   # Size chosen
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='cod')
+    # ---------- ORDER TYPE ----------
+    is_custom = models.BooleanField(default=False)   # True if this is a custom cake order
+    
+    # ---------- STANDARD CAKE DETAILS ----------
+    size = models.CharField(max_length=50, blank=True)
+    
+    # ---------- CUSTOM CAKE DETAILS (only used if is_custom = True) ----------
+    custom_size = models.CharField(max_length=50, blank=True)
+    custom_flavour = models.CharField(max_length=50, blank=True)
+    custom_filling = models.CharField(max_length=50, blank=True)
+    custom_frosting = models.CharField(max_length=50, blank=True)
+    custom_decorations = models.TextField(blank=True)   # Comma-separated list
+    
+    # ---------- PRICING & PAYMENT ----------
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='discuss')
     
     # ---------- CUSTOMER INFO ----------
     delivery_address = models.TextField(blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     
+    # ---------- NOTES ----------
+    customer_notes = models.TextField(blank=True, help_text="Any extra requests from the customer")
+    
     # ---------- STATUS & TIMESTAMPS ----------
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)   # Auto-set when created
-    updated_at = models.DateTimeField(auto_now=True)       # Auto-updated on change
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
+        if self.is_custom:
+            return f"Order #{self.id} - CUSTOM - {self.customer.username}"
         return f"Order #{self.id} - {self.customer.username} - {self.cake.name if self.cake else 'Deleted'}"

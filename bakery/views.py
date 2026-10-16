@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Cake
+from .models import Cake, Profile, Order
 from django.shortcuts import render, redirect
 from .forms import SignupForm
 from django.contrib import messages
@@ -48,3 +48,61 @@ def custom_logout(request):
     logout(request)
     messages.info(request, "You have been logged out. See you soon! 👋")
     return redirect('home')
+
+from django.shortcuts import render
+
+# =====================================================
+# CUSTOMISE VIEW
+# Shows the customise page + handles custom order submission
+# =====================================================
+def customise(request):
+    
+    # ---------- HANDLE ORDER SUBMISSION ----------
+    if request.method == 'POST' and request.user.is_authenticated:
+        # Get the options the user selected
+        custom_size = request.POST.get('custom_size', '')
+        custom_flavour = request.POST.get('custom_flavour', '')
+        custom_filling = request.POST.get('custom_filling', '')
+        custom_frosting = request.POST.get('custom_frosting', '')
+        custom_decorations = request.POST.get('custom_decorations', '')
+        customer_notes = request.POST.get('customer_notes', '')
+        
+        # Get the user's profile for delivery info
+        try:
+            profile = request.user.profile
+            delivery_address = profile.delivery_address
+            phone_number = profile.phone_number
+        except Profile.DoesNotExist:
+            delivery_address = ''
+            phone_number = ''
+        
+        # Create the custom order in the database
+        order = Order.objects.create(
+            customer=request.user,
+            cake=None,                    # No specific cake linked
+            is_custom=True,               # Mark it as a custom order
+            custom_size=custom_size,
+            custom_flavour=custom_flavour,
+            custom_filling=custom_filling,
+            custom_frosting=custom_frosting,
+            custom_decorations=custom_decorations,
+            customer_notes=customer_notes,
+            total_price=0,                # Price will be set by the baker
+            payment_method='discuss',     # Custom orders discuss payment
+            delivery_address=delivery_address,
+            phone_number=phone_number,
+            status='pending',
+        )
+        
+        # Show success message
+        messages.success(
+            request,
+            f"🎉 Your custom cake request #{order.id} has been submitted! "
+            f"We will contact you shortly to confirm the details and price."
+        )
+        
+        # Redirect back to the customise page
+        return redirect('customise')
+    
+    # ---------- SHOW THE PAGE ----------
+    return render(request, 'bakery/customise.html')
