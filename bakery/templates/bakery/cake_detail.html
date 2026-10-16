@@ -57,8 +57,49 @@
                 <p class="small-note">Final price may vary<br>with customisation<br>options</p>
             </div>
 
-            <a href="#" class="order-btn">Sign Up to Order This Cake</a>
-            <p class="login-note">Already have an account? <a href="#">Log in to order</a></p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'signup' %}" class="order-btn">Sign Up to Order This Cake</a>
+                <p class="login-note">Already have an account? <a href="{% url 'login' %}">Log in to order</a></p>
+
+            {# --- If user IS logged in → show the order form --- #}
+            {% else %}
+                <form method="POST" class="order-form">
+                    {% csrf_token %}
+                    
+                    {# Hidden fields: the current size and price get sent with the form #}
+                    <input type="hidden" name="size" id="form-size" value='Small (6")'>
+                    <input type="hidden" name="total_price" id="form-price" value="{{ cake.base_price|floatformat:0 }}">
+
+                    {# --- Payment Method Selection --- #}
+                    <p class="option-label" style="margin-top:20px;">HOW WOULD YOU LIKE TO PAY?</p>
+                    
+                    <div class="payment-options">
+                        
+                        {# MCB Juice option #}
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="mcb_juice" checked>
+                            <div class="payment-info">
+                                <strong>💳 MCB Juice</strong>
+                                <small>Pay securely using Juice by MCB</small>
+                            </div>
+                        </label>
+                        
+                        {# Cash on Delivery option #}
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="cod">
+                            <div class="payment-info">
+                                <strong>💵 Cash on Delivery</strong>
+                                <small>Pay when you receive your cake</small>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    {# --- Submit Button --- #}
+                    <button type="submit" class="order-btn" style="border:none; cursor:pointer; width:100%;">
+                        Place Order
+                    </button>
+                </form>
+            {% endif %}
         </div>
     </div>
 
@@ -85,20 +126,32 @@
 </section>
 
 <script>
+// =====================================================
+// SELECT SIZE
+// Updates the 'selected' box, the estimated price display,
+// AND the hidden form fields (so they get submitted correctly)
+// =====================================================
 function selectSize(element) {
-    // Remove the 'selected' class from all size options
+    // 1. Remove 'selected' from all size options
     document.querySelectorAll('.size-option').forEach(function(opt) {
         opt.classList.remove('selected');
     });
 
-    // Add 'selected' to the one that was clicked
+    // 2. Add 'selected' to the clicked option
     element.classList.add('selected');
 
-    // Update the price
+    // 3. Calculate the new price
     const basePrice = parseFloat("{{ cake.base_price }}");
     const extraCost = parseFloat(element.dataset.price);
     const total = basePrice + extraCost;
+
+    // 4. Update the display price
     document.getElementById('total-price').innerText = 'Rs ' + total.toFixed(2);
+
+    // 5. Update the HIDDEN form fields (so they get submitted with the order)
+    const sizeText = element.querySelector('strong').innerText;  // e.g. "Medium (8")"
+    document.getElementById('form-size').value = sizeText;
+    document.getElementById('form-price').value = total.toFixed(2);
 }
 </script>
 
