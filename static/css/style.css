@@ -1096,3 +1096,180 @@ button.tag.selected {
 .btn-primary:disabled:hover {
     background-color: #c9b8a8;
 }
+
+/* ===================================================== */
+/* ADMIN LAYOUT (sidebar + content) (by Avanish)         */
+/* ===================================================== */
+
+.admin-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;   /* 260px sidebar, rest for content */
+    min-height: calc(100vh - 80px);
+    background-color: #fdfaf5;
+}
+
+/* ---------- SIDEBAR ---------- */
+.admin-sidebar {
+    background-color: #1e1410;   /* Very dark brown */
+    color: #c9b8a8;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 0;
+}
+
+.admin-sidebar-header {
+    padding: 0 25px 25px;
+    border-bottom: 1px solid #3a2820;
+    margin-bottom: 20px;
+}
+
+.admin-sidebar-header p {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #7a6558;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.admin-sidebar-header h3 {
+    color: #f4ead5;
+    font-size: 16px;
+    font-family: 'Georgia', serif;
+}
+
+/* ---------- SIDEBAR NAV LINKS ---------- */
+.admin-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 15px;
+    flex-grow: 1;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: #c9b8a8;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.admin-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #f4ead5;
+}
+
+.admin-nav-link.active {
+    background-color: #f4ead5;
+    color: #2b1d16;
+    font-weight: bold;
+}
+
+.admin-nav-link span {
+    font-size: 16px;
+}
+
+/* ---------- SIDEBAR FOOTER ---------- */
+.admin-sidebar-footer {
+    padding: 20px 25px 0;
+    border-top: 1px solid #3a2820;
+    margin-top: 20px;
+}
+
+.admin-sidebar-footer a {
+    color: #d19a7a;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.admin-sidebar-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- MAIN CONTENT ---------- */
+.admin-content {
+    padding: 40px 50px;
+    overflow-x: auto;
+}
+
+/* ===================================================== */
+/* ADMIN PAGE HEADERS (by Avanish)                       */
+/* ===================================================== */
+
+.admin-page-header {
+    margin-bottom: 30px;
+}
+
+.admin-page-header h1 {
+    font-family: 'Georgia', serif;
+    font-size: 32px;
+    color: #2b1d16;
+    margin-bottom: 5px;
+}
+
+.admin-page-header p {
+    font-size: 13px;
+    color: #8b7d6f;
+}
+
+/* ===================================================== */
+/* ADMIN TABLE      (by Avanish)                         */
+/* ===================================================== */
+
+.admin-table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 5px 10px;
+    box-shadow: 0 2px 10px rgba(43, 29, 22, 0.05);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.admin-table thead th {
+    text-align: left;
+    padding: 18px 15px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #a89786;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 1px solid #efe8dd;
+}
+
+.admin-table tbody td {
+    padding: 18px 15px;
+    color: #2b1d16;
+    border-bottom: 1px solid #f5ede2;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #fdfaf5;
+}
+
+/* Formatting for specific cells */
+.admin-id {
+    color: #8b6f52;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.order-count {
+    background-color: #d19a7a;
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}

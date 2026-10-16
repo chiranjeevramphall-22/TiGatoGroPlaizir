@@ -1,0 +1,64 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{# ===================================================== #}
+{# ADMIN BASE TEMPLATE                                   #}
+{# Provides the dark sidebar for all admin pages.        #}
+{# Every admin page extends THIS file, not base.html.    #}
+{# ===================================================== #}
+
+{% block content %}
+
+<div class="admin-layout">
+
+    {# ============ LEFT SIDEBAR ============ #}
+    <aside class="admin-sidebar">
+        
+        {# Sidebar header #}
+        <div class="admin-sidebar-header">
+            <p>ADMINISTRATION</p>
+            <h3>Ti Gato Gro Plaizir</h3>
+        </div>
+
+        {# Sidebar navigation links #}
+        <nav class="admin-sidebar-nav">
+            
+            <a href="{% url 'admin_customers' %}" class="admin-nav-link {% if active_page == 'customers' %}active{% endif %}">
+                <span>👥</span> Customers
+            </a>
+            
+            <a href="#" class="admin-nav-link {% if active_page == 'catalogue' %}active{% endif %}">
+                <span>🍰</span> Cake Catalogue
+            </a>
+            
+            <a href="#" class="admin-nav-link {% if active_page == 'options' %}active{% endif %}">
+                <span>⚙️</span> Customisation Options
+            </a>
+            
+            <a href="#" class="admin-nav-link {% if active_page == 'requests' %}active{% endif %}">
+                <span>📝</span> Custom Requests
+            </a>
+            
+            <a href="#" class="admin-nav-link {% if active_page == 'orders' %}active{% endif %}">
+                <span>📦</span> Customer Orders
+            </a>
+            
+        </nav>
+
+        {# Sidebar footer: exit link #}
+        <div class="admin-sidebar-footer">
+            <a href="{% url 'home' %}">← Exit Admin</a>
+        </div>
+        
+    </aside>
+
+    {# ============ MAIN CONTENT AREA ============ #}
+    <main class="admin-content">
+        {% block admin_content %}
+        <!-- Each admin page will fill this block -->
+        {% endblock %}
+    </main>
+
+</div>
+
+{% endblock %}

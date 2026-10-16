@@ -14,5 +14,10 @@ urlpatterns = [
     path('login/', views.CustomLoginView.as_view(), name='login'),  # <-- Changed
     path('logout/', views.custom_logout, name='logout'),
     path('signup/', views.signup, name='signup'),
+
+    # Admin panel
+    path('admin-login/', views.admin_login, name='admin_login'),
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin-customers/', views.admin_customers, name='admin_customers'),   # <-- NEW
 ]
 

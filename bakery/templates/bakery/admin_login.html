@@ -1,0 +1,32 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="auth-page" style="background-image: url('{% static "images/login-bg.jpg" %}');">
+    
+    <div class="auth-card">
+        <p class="section-label">STAFF ACCESS</p>
+        <h1>Admin Login</h1>
+        <p class="auth-subtitle">This area is for bakery staff only.</p>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <label for="username">USERNAME</label>
+            <input type="text" id="username" name="username" placeholder="Admin username" required>
+
+            <label for="password">PASSWORD</label>
+            <input type="password" id="password" name="password" placeholder="Admin password" required>
+
+            <button type="submit" class="auth-btn">Log In as Admin</button>
+        </form>
+        
+        <p class="auth-footer">
+            Not an admin? <a href="{% url 'login' %}">Customer login here</a>
+        </p>
+    </div>
+
+</section>
+
+{% endblock %}
