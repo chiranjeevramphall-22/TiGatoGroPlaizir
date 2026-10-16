@@ -1273,3 +1273,17 @@ button.tag.selected {
     font-size: 12px;
     font-weight: bold;
 }
+
+/* ===================================================== */
+/* ADMIN ADDRESS COLUMN                                  */
+/* Keeps long addresses from stretching the table.       */
+/* ===================================================== */
+
+.admin-address {
+    max-width: 220px;
+    white-space: normal;
+    word-wrap: break-word;
+    font-size: 12px;
+    color: #6a5445;
+    line-height: 1.4;
+}
