@@ -1,15 +1,16 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Cake, Profile, Order
-from django.shortcuts import render, redirect
-from .forms import SignupForm
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
-from django.contrib.auth import logout
-from django.shortcuts import redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
 
+from .models import Cake, Profile, Order
+from .forms import SignupForm
 
+# =====================================================
+# PUBLIC PAGES
+# =====================================================
 def home(request):
     return render(request, 'bakery/home.html')
 
@@ -24,6 +25,9 @@ def cake_detail(request, cake_id):
 def about_us(request):
     return render(request, 'bakery/about_us.html')
 
+# =====================================================
+# AUTHENTICATION
+# =====================================================
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -111,7 +115,6 @@ def customise(request):
 # =====================================================
 # ADMIN LOGIN VIEW
 # Custom admin login — only staff accounts can log in.
-# By Avanish
 # =====================================================
 from django.contrib.auth import authenticate, login
 
@@ -147,7 +150,6 @@ def admin_login(request):
 # ADMIN: CUSTOMER ACCOUNTS PAGE
 # Shows all registered customers (non-staff only).
 # Only accessible by staff users.
-#(by Avanish)
 # =====================================================
 from django.contrib.auth.decorators import user_passes_test
 
