@@ -1,0 +1,172 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="customise-container">
+    <section class="customise-header">
+        <p class="subtitle">CUSTOMISE YOUR CAKE</p>
+        <h1>Make It Yours</h1>
+        <p class="description">
+            Every cake can be tailored to your occasion. Choose from the options below — then create an account to place your order.
+        </p>
+    </section>
+
+    <!-- Grid Options Section -->
+    <section class="options-grid">
+        <!-- Sizes (Single Select) -->
+        <div class="option-card" data-category="size" data-single="true">
+            <h3><span class="icon">⬡</span> Sizes</h3>
+            <div class="tags">
+                <button type="button" class="tag" data-value="Small (6&quot;)">Small (6")</button>
+                <button type="button" class="tag" data-value="Medium (8&quot;)">Medium (8")</button>
+                <button type="button" class="tag" data-value="Large (10&quot;)">Large (10")</button>
+                <button type="button" class="tag" data-value="Extra Large (12&quot;)">Extra Large (12")</button>
+            </div>
+        </div>
+
+        <!-- Flavours (Single Select) -->
+        <div class="option-card" data-category="flavour" data-single="true">
+            <h3><span class="icon">❖</span> Flavours</h3>
+            <div class="tags">
+                <button type="button" class="tag" data-value="Vanilla">Vanilla</button>
+                <button type="button" class="tag" data-value="Chocolate">Chocolate</button>
+                <button type="button" class="tag" data-value="Red Velvet">Red Velvet</button>
+                <button type="button" class="tag" data-value="Lemon">Lemon</button>
+                <button type="button" class="tag" data-value="Strawberry">Strawberry</button>
+                <button type="button" class="tag" data-value="Coconut">Coconut</button>
+                <button type="button" class="tag" data-value="Caramel">Caramel</button>
+                <button type="button" class="tag" data-value="Matcha">Matcha</button>
+            </div>
+        </div>
+
+        <!-- Fillings (Single Select) -->
+        <div class="option-card" data-category="filling" data-single="true">
+            <h3><span class="icon">◎</span> Fillings</h3>
+            <div class="tags">
+                <button type="button" class="tag" data-value="Whipped Cream">Whipped Cream</button>
+                <button type="button" class="tag" data-value="Cream Cheese">Cream Cheese</button>
+                <button type="button" class="tag" data-value="Chocolate Ganache">Chocolate Ganache</button>
+                <button type="button" class="tag" data-value="Fruit Compote">Fruit Compote</button>
+                <button type="button" class="tag" data-value="Buttercream">Buttercream</button>
+                <button type="button" class="tag" data-value="Custard">Custard</button>
+            </div>
+        </div>
+
+        <!-- Frostings (Single Select) -->
+        <div class="option-card" data-category="frosting" data-single="true">
+            <h3><span class="icon">✻</span> Frostings</h3>
+            <div class="tags">
+                <button type="button" class="tag" data-value="Buttercream">Buttercream</button>
+                <button type="button" class="tag" data-value="Fondant">Fondant</button>
+                <button type="button" class="tag" data-value="Cream Cheese">Cream Cheese</button>
+                <button type="button" class="tag" data-value="Whipped Cream">Whipped Cream</button>
+                <button type="button" class="tag" data-value="Naked (no frosting)">Naked (no frosting)</button>
+                <button type="button" class="tag" data-value="Mirror Glaze">Mirror Glaze</button>
+            </div>
+        </div>
+
+        <!-- Decorations (Multi Select) -->
+        <div class="option-card" data-category="decorations" data-single="false">
+            <h3><span class="icon">✦</span> Decorations</h3>
+            <div class="tags">
+                <button type="button" class="tag" data-value="Fresh Flowers">Fresh Flowers</button>
+                <button type="button" class="tag" data-value="Chocolate Drizzle">Chocolate Drizzle</button>
+                <button type="button" class="tag" data-value="Fruit Topping">Fruit Topping</button>
+                <button type="button" class="tag" data-value="Edible Glitter">Edible Glitter</button>
+                <button type="button" class="tag" data-value="Fondant Figures">Fondant Figures</button>
+                <button type="button" class="tag" data-value="Sprinkles">Sprinkles</button>
+                <button type="button" class="tag" data-value="Gold Leaf">Gold Leaf</button>
+            </div>
+        </div>
+
+        <!-- How to Order -->
+        <div class="option-card step-card">
+            <h3><span class="icon">→</span> How to Order</h3>
+            <div class="tags">
+                <span class="info-tag">1. Select your custom choices</span>
+                <span class="info-tag">2. Create a free account</span>
+                <span class="info-tag">3. Submit your order</span>
+                <span class="info-tag">4. We confirm & bake!</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selection Summary -->
+    <section class="summary-box" id="summaryBox">
+        <h3>Your Custom Selection</h3>
+        <p id="summaryText">No options selected yet. Click the buttons above to customize!</p>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <a href="{% url 'signup' %}" class="btn-primary">Create an Account to Order</a>
+        <p class="login-prompt">
+            Already have an account? <a href="{% url 'login' %}">Log in here</a>
+        </p>
+    </section>
+</main>
+
+<!-- JavaScript for Interactivity -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const selections = {
+        size: null,
+        flavour: null,
+        filling: null,
+        frosting: null,
+        decorations: []
+    };
+
+    const cards = document.querySelectorAll(".option-card[data-category]");
+
+    cards.forEach(card => {
+        const category = card.dataset.category;
+        const isSingle = card.dataset.single === "true";
+        const buttons = card.querySelectorAll("button.tag");
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", function() {
+                const val = this.dataset.value;
+
+                if (isSingle) {
+                    buttons.forEach(b => b.classList.remove("selected"));
+                    if (selections[category] === val) {
+                        selections[category] = null;
+                    } else {
+                        this.classList.add("selected");
+                        selections[category] = val;
+                    }
+                } else {
+                    this.classList.toggle("selected");
+                    if (this.classList.contains("selected")) {
+                        selections.decorations.push(val);
+                    } else {
+                        selections.decorations = selections.decorations.filter(item => item !== val);
+                    }
+                }
+                updateSummary();
+            });
+        });
+    });
+
+    function updateSummary() {
+        const summaryText = document.getElementById("summaryText");
+        let parts = [];
+
+        if (selections.size) parts.push(`<strong>Size:</strong> ${selections.size}`);
+        if (selections.flavour) parts.push(`<strong>Flavour:</strong> ${selections.flavour}`);
+        if (selections.filling) parts.push(`<strong>Filling:</strong> ${selections.filling}`);
+        if (selections.frosting) parts.push(`<strong>Frosting:</strong> ${selections.frosting}`);
+        if (selections.decorations.length > 0) {
+            parts.push(`<strong>Decorations:</strong> ${selections.decorations.join(", ")}`);
+        }
+
+        if (parts.length > 0) {
+            summaryText.innerHTML = parts.join(" | ");
+        } else {
+            summaryText.innerHTML = "No options selected yet. Click the buttons above to customize!";
+        }
+    }
+});
+</script>
+{% endblock %}

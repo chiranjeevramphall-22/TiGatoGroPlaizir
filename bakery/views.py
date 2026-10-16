@@ -48,3 +48,8 @@ def custom_logout(request):
     logout(request)
     messages.info(request, "You have been logged out. See you soon! 👋")
     return redirect('home')
+
+from django.shortcuts import render
+
+def customise(request):
+    return render(request, 'bakery/customise.html')

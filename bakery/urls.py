@@ -8,9 +8,11 @@ urlpatterns = [
     path('our-cakes/', views.our_cakes, name='our_cakes'),
     path('cake/<int:cake_id>/', views.cake_detail, name='cake_detail'),
     path('about-us/', views.about_us, name='about_us'),
+    path('customise/', views.customise, name='customise'),
     
     # Authentication
     path('login/', views.CustomLoginView.as_view(), name='login'),  # <-- Changed
     path('logout/', views.custom_logout, name='logout'),
     path('signup/', views.signup, name='signup'),
 ]
+
