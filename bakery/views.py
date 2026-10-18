@@ -4,8 +4,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from .models import Cake, Profile, Order
-from .forms import SignupForm, CakeForm
+from django.urls import reverse
+from .models import Cake, Profile, Order, CustomisationOption
+from .forms import SignupForm, CakeForm, CustomisationOptionForm
 from django.views.decorators.http import require_POST
 
 # =====================================================
@@ -71,6 +72,41 @@ def customise(request):
         custom_frosting = request.POST.get('custom_frosting', '')
         custom_decorations = request.POST.get('custom_decorations', '')
         customer_notes = request.POST.get('customer_notes', '')
+
+        # Server-side validation confirms that submitted values are
+        # still active options from the database. This cannot be
+        # bypassed by changing the HTML in the browser.
+        required_selections = {
+            'size': custom_size,
+            'flavour': custom_flavour,
+            'filling': custom_filling,
+            'frosting': custom_frosting,
+        }
+        selections_are_valid = all(
+            value and CustomisationOption.objects.filter(
+                category=category,
+                name__iexact=value,
+            ).exists()
+            for category, value in required_selections.items()
+        )
+
+        decoration_names = [
+            name.strip() for name in custom_decorations.split(',') if name.strip()
+        ]
+        decorations_are_valid = all(
+            CustomisationOption.objects.filter(
+                category='decoration',
+                name__iexact=name,
+            ).exists()
+            for name in decoration_names
+        )
+
+        if not selections_are_valid or not decorations_are_valid:
+            messages.error(
+                request,
+                "Please select valid size, flavour, filling and frosting options."
+            )
+            return redirect('customise')
         
         # Get the user's profile for delivery info
         try:
@@ -109,8 +145,17 @@ def customise(request):
         # Redirect back to the customise page
         return redirect('customise')
     
-    # ---------- SHOW THE PAGE ----------
-    return render(request, 'bakery/customise.html')
+    # ---------- SHOW DATABASE-DRIVEN OPTIONS ----------
+    # Changes made by the administrator are immediately reflected
+    # on the public Customise page.
+    context = {
+        'size_options': CustomisationOption.objects.filter(category='size'),
+        'flavour_options': CustomisationOption.objects.filter(category='flavour'),
+        'filling_options': CustomisationOption.objects.filter(category='filling'),
+        'frosting_options': CustomisationOption.objects.filter(category='frosting'),
+        'decoration_options': CustomisationOption.objects.filter(category='decoration'),
+    }
+    return render(request, 'bakery/customise.html', context)
 
 # =====================================================
 # ADMIN LOGIN VIEW
@@ -227,4 +272,61 @@ def admin_cake_delete(request, cake_id):
     cake.delete()   # Orders keep existing: Order.cake is SET_NULL
     messages.success(request, f"\"{name}\" was removed from the catalogue.")
     return redirect('admin_catalogue')
+
+
+# =====================================================
+# ADMIN: CUSTOMISATION OPTIONS PAGE
+# Lets staff view, add and remove the sizes, flavours,
+# fillings, frostings and decorations shown to customers.
+# Every operation is protected by a staff permission check.
+# =====================================================
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_customisation_options(request):
+    valid_categories = dict(CustomisationOption.CATEGORY_CHOICES)
+
+    # GET uses the selected tab; POST uses the hidden category field.
+    active_category = (
+        request.POST.get('category')
+        if request.method == 'POST'
+        else request.GET.get('category', 'size')
+    )
+    if active_category not in valid_categories:
+        active_category = 'size'
+
+    if request.method == 'POST':
+        form = CustomisationOptionForm(
+            request.POST,
+            category=active_category,
+        )
+        if form.is_valid():
+            option = form.save()
+            messages.success(request, f'"{option.name}" was added successfully.')
+            return redirect(
+                f"{reverse('admin_customisation_options')}?category={active_category}"
+            )
+    else:
+        form = CustomisationOptionForm(category=active_category)
+
+    context = {
+        'form': form,
+        'categories': CustomisationOption.CATEGORY_CHOICES,
+        'active_category': active_category,
+        'active_category_label': valid_categories[active_category],
+        'options': CustomisationOption.objects.filter(category=active_category),
+        'active_page': 'options',
+    }
+    return render(request, 'bakery/admin_customisation_options.html', context)
+
+
+@require_POST
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_customisation_option_delete(request, option_id):
+    option = get_object_or_404(CustomisationOption, pk=option_id)
+    active_category = option.category
+    option_name = option.name
+    option.delete()
+    messages.success(request, f'"{option_name}" was removed successfully.')
+    return redirect(
+        f"{reverse('admin_customisation_options')}?category={active_category}"
+    )
 

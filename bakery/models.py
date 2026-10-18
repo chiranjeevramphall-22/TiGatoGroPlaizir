@@ -91,3 +91,36 @@ class Order(models.Model):
         if self.is_custom:
             return f"Order #{self.id} - CUSTOM - {self.customer.username}"
         return f"Order #{self.id} - {self.customer.username} - {self.cake.name if self.cake else 'Deleted'}"
+
+
+# =====================================================
+# CUSTOMISATION OPTION MODEL
+# Stores every size, flavour, filling, frosting and
+# decoration that an administrator makes available to
+# customers on the Customise page.
+# =====================================================
+class CustomisationOption(models.Model):
+
+    CATEGORY_CHOICES = [
+        ('size', 'Sizes'),
+        ('flavour', 'Flavours'),
+        ('filling', 'Fillings'),
+        ('frosting', 'Frostings'),
+        ('decoration', 'Decorations'),
+    ]
+
+    name = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['category', 'id']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['category', 'name'],
+                name='unique_customisation_option',
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.get_category_display()} - {self.name}"

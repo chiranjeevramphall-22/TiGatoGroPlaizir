@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cake, Profile, Order
+from .models import Cake, Profile, Order, CustomisationOption
 
 # ---------- CAKE ADMIN ----------
 @admin.register(Cake)
@@ -52,3 +52,12 @@ class OrderAdmin(admin.ModelAdmin):
             return f"{obj.custom_size} - {obj.custom_flavour}"
         return obj.cake.name if obj.cake else "Deleted"
     get_cake_name.short_description = "Cake"
+
+
+# ---------- CUSTOMISATION OPTION ADMIN ----------
+# Provides a backup management interface in Django's built-in admin.
+@admin.register(CustomisationOption)
+class CustomisationOptionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'created_at')
+    list_filter = ('category',)
+    search_fields = ('name',)

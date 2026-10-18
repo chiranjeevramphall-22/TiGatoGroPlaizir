@@ -118,6 +118,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Keep the primary-key type used by the project's existing migrations.
+# Declaring it explicitly removes Django's AutoField system-check warnings.
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/

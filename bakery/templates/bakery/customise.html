@@ -17,10 +17,11 @@
         <div class="option-card" data-category="size" data-single="true">
             <h3><span class="icon">⬡</span> Sizes</h3>
             <div class="tags">
-                <button type="button" class="tag" data-value="Small (6&quot;)">Small (6")</button>
-                <button type="button" class="tag" data-value="Medium (8&quot;)">Medium (8")</button>
-                <button type="button" class="tag" data-value="Large (10&quot;)">Large (10")</button>
-                <button type="button" class="tag" data-value="Extra Large (12&quot;)">Extra Large (12")</button>
+                {% for option in size_options %}
+                    <button type="button" class="tag" data-value="{{ option.name }}">{{ option.name }}</button>
+                {% empty %}
+                    <span class="info-tag">No sizes are currently available.</span>
+                {% endfor %}
             </div>
         </div>
 
@@ -28,14 +29,11 @@
         <div class="option-card" data-category="flavour" data-single="true">
             <h3><span class="icon">❖</span> Flavours</h3>
             <div class="tags">
-                <button type="button" class="tag" data-value="Vanilla">Vanilla</button>
-                <button type="button" class="tag" data-value="Chocolate">Chocolate</button>
-                <button type="button" class="tag" data-value="Red Velvet">Red Velvet</button>
-                <button type="button" class="tag" data-value="Lemon">Lemon</button>
-                <button type="button" class="tag" data-value="Strawberry">Strawberry</button>
-                <button type="button" class="tag" data-value="Coconut">Coconut</button>
-                <button type="button" class="tag" data-value="Caramel">Caramel</button>
-                <button type="button" class="tag" data-value="Matcha">Matcha</button>
+                {% for option in flavour_options %}
+                    <button type="button" class="tag" data-value="{{ option.name }}">{{ option.name }}</button>
+                {% empty %}
+                    <span class="info-tag">No flavours are currently available.</span>
+                {% endfor %}
             </div>
         </div>
 
@@ -43,12 +41,11 @@
         <div class="option-card" data-category="filling" data-single="true">
             <h3><span class="icon">◎</span> Fillings</h3>
             <div class="tags">
-                <button type="button" class="tag" data-value="Whipped Cream">Whipped Cream</button>
-                <button type="button" class="tag" data-value="Cream Cheese">Cream Cheese</button>
-                <button type="button" class="tag" data-value="Chocolate Ganache">Chocolate Ganache</button>
-                <button type="button" class="tag" data-value="Fruit Compote">Fruit Compote</button>
-                <button type="button" class="tag" data-value="Buttercream">Buttercream</button>
-                <button type="button" class="tag" data-value="Custard">Custard</button>
+                {% for option in filling_options %}
+                    <button type="button" class="tag" data-value="{{ option.name }}">{{ option.name }}</button>
+                {% empty %}
+                    <span class="info-tag">No fillings are currently available.</span>
+                {% endfor %}
             </div>
         </div>
 
@@ -56,12 +53,11 @@
         <div class="option-card" data-category="frosting" data-single="true">
             <h3><span class="icon">✻</span> Frostings</h3>
             <div class="tags">
-                <button type="button" class="tag" data-value="Buttercream">Buttercream</button>
-                <button type="button" class="tag" data-value="Fondant">Fondant</button>
-                <button type="button" class="tag" data-value="Cream Cheese">Cream Cheese</button>
-                <button type="button" class="tag" data-value="Whipped Cream">Whipped Cream</button>
-                <button type="button" class="tag" data-value="Naked (no frosting)">Naked (no frosting)</button>
-                <button type="button" class="tag" data-value="Mirror Glaze">Mirror Glaze</button>
+                {% for option in frosting_options %}
+                    <button type="button" class="tag" data-value="{{ option.name }}">{{ option.name }}</button>
+                {% empty %}
+                    <span class="info-tag">No frostings are currently available.</span>
+                {% endfor %}
             </div>
         </div>
 
@@ -69,13 +65,11 @@
         <div class="option-card" data-category="decorations" data-single="false">
             <h3><span class="icon">✦</span> Decorations</h3>
             <div class="tags">
-                <button type="button" class="tag" data-value="Fresh Flowers">Fresh Flowers</button>
-                <button type="button" class="tag" data-value="Chocolate Drizzle">Chocolate Drizzle</button>
-                <button type="button" class="tag" data-value="Fruit Topping">Fruit Topping</button>
-                <button type="button" class="tag" data-value="Edible Glitter">Edible Glitter</button>
-                <button type="button" class="tag" data-value="Fondant Figures">Fondant Figures</button>
-                <button type="button" class="tag" data-value="Sprinkles">Sprinkles</button>
-                <button type="button" class="tag" data-value="Gold Leaf">Gold Leaf</button>
+                {% for option in decoration_options %}
+                    <button type="button" class="tag" data-value="{{ option.name }}">{{ option.name }}</button>
+                {% empty %}
+                    <span class="info-tag">No decorations are currently available.</span>
+                {% endfor %}
             </div>
         </div>
 
