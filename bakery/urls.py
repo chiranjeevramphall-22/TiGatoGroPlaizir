@@ -22,5 +22,7 @@ urlpatterns = [
     path('admin-catalogue/', views.admin_catalogue, name='admin_catalogue'),
     path('admin-catalogue/<int:cake_id>/edit/', views.admin_cake_edit, name='admin_cake_edit'),
     path('admin-catalogue/<int:cake_id>/delete/', views.admin_cake_delete, name='admin_cake_delete'),
+    path('admin-customisation-options/', views.admin_customisation_options, name='admin_customisation_options'),
+    path('admin-customisation-options/<int:option_id>/delete/', views.admin_customisation_option_delete, name='admin_customisation_option_delete'),
 ]
 

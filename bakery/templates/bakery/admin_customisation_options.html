@@ -1,0 +1,70 @@
+{% extends 'bakery/admin_base.html' %}
+
+{# ===================================================== #}
+{# ADMIN CUSTOMISATION OPTIONS PAGE                      #}
+{# Allows staff to switch between option categories,     #}
+{# view current values, add a new value and remove one.   #}
+{# All changes are stored in the database and immediately #}
+{# update the options on the customer Customise page.     #}
+{# ===================================================== #}
+
+{% block admin_content %}
+
+<div class="admin-page-header custom-options-header">
+    <h1>Customisation Options</h1>
+    <p>Manage available sizes, flavours, fillings, frostings, and decorations</p>
+</div>
+
+{# Category tabs reproduce the controls shown in the Figma design. #}
+<nav class="custom-options-tabs" aria-label="Customisation option categories">
+    {% for category_value, category_label in categories %}
+        <a href="{% url 'admin_customisation_options' %}?category={{ category_value }}"
+           class="custom-options-tab {% if active_category == category_value %}active{% endif %}">
+            {{ category_label }}
+        </a>
+    {% endfor %}
+</nav>
+
+<section class="custom-options-card">
+    <h2 class="visually-hidden">{{ active_category_label }}</h2>
+
+    {# Existing options are displayed as removable chips. #}
+    <div class="custom-options-list">
+        {% for option in options %}
+            <div class="custom-option-chip">
+                <span>{{ option.name }}</span>
+                <form method="post"
+                      action="{% url 'admin_customisation_option_delete' option.id %}"
+                      onsubmit="return confirm('Remove {{ option.name|escapejs }}?');">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="custom-option-remove"
+                            aria-label="Remove {{ option.name }}">×</button>
+                </form>
+            </div>
+        {% empty %}
+            <p class="custom-options-empty">No {{ active_category_label|lower }} have been added yet.</p>
+        {% endfor %}
+    </div>
+
+    {# Add form: pressing Enter or clicking Add submits the option. #}
+    <form method="post" class="custom-options-form">
+        {% csrf_token %}
+        <input type="hidden" name="category" value="{{ active_category }}">
+
+        <div class="custom-options-input-row">
+            {{ form.name }}
+            <button type="submit" class="custom-options-add">Add</button>
+        </div>
+
+        {% for error in form.name.errors %}
+            <p class="custom-options-error">{{ error }}</p>
+        {% endfor %}
+
+        <p class="custom-options-help">
+            Press Enter or click Add. Click × to remove an option.
+        </p>
+    </form>
+</section>
+
+{% endblock %}

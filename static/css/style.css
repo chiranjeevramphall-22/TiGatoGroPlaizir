@@ -1548,3 +1548,179 @@ button.tag.selected {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===================================================== */
+/* ADMIN CUSTOMISATION OPTIONS PAGE                      */
+/* Implements the category tabs, removable option chips  */
+/* and add form shown in the Figma admin design.          */
+/* ===================================================== */
+
+.custom-options-header {
+    margin-bottom: 20px;
+}
+
+.custom-options-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.custom-options-tab {
+    display: inline-block;
+    padding: 8px 17px;
+    border: 1px solid #dfd2c3;
+    border-radius: 999px;
+    background-color: #fffdf9;
+    color: #5d493c;
+    font-size: 13px;
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.custom-options-tab:hover {
+    border-color: #c9826a;
+}
+
+.custom-options-tab.active {
+    background-color: #2b1d16;
+    border-color: #2b1d16;
+    color: #ffffff;
+}
+
+.custom-options-card {
+    width: min(100%, 760px);
+    padding: 24px;
+    background-color: #f3ebe0;
+    border-radius: 18px;
+}
+
+.custom-options-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    min-height: 34px;
+    margin-bottom: 22px;
+}
+
+.custom-option-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 9px 7px 13px;
+    border: 1px solid #e2d7c8;
+    border-radius: 999px;
+    background-color: #fffdf9;
+    color: #5d493c;
+    font-size: 13px;
+}
+
+.custom-option-chip form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.custom-option-remove {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #9a7b68;
+    font-size: 16px;
+    line-height: 16px;
+    cursor: pointer;
+}
+
+.custom-option-remove:hover {
+    background-color: #f1d9cf;
+    color: #8e3f31;
+}
+
+.custom-options-form {
+    width: 100%;
+}
+
+.custom-options-input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+}
+
+.custom-options-input-row input {
+    min-width: 0;
+    padding: 13px 16px;
+    border: 1px solid #dfd2c3;
+    border-radius: 12px;
+    background-color: #fffdf9;
+    color: #2b1d16;
+    font-size: 14px;
+    outline: none;
+}
+
+.custom-options-input-row input:focus {
+    border-color: #c9826a;
+    box-shadow: 0 0 0 3px rgba(201, 130, 106, 0.12);
+}
+
+.custom-options-add {
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background-color: #c9826a;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.custom-options-add:hover {
+    background-color: #b5705a;
+}
+
+.custom-options-help,
+.custom-options-empty {
+    margin-top: 9px;
+    color: #8b7d6f;
+    font-size: 12px;
+}
+
+.custom-options-error {
+    margin-top: 9px;
+    color: #a4262c;
+    font-size: 12px;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 800px) {
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-sidebar {
+        min-height: auto;
+    }
+
+    .admin-content {
+        padding: 28px 20px;
+    }
+
+    .custom-options-input-row {
+        grid-template-columns: 1fr;
+    }
+
+    .custom-options-add {
+        min-height: 44px;
+    }
+}

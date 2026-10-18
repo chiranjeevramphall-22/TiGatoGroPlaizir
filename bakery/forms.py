@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Cake
+from .models import Profile, Cake, CustomisationOption
 
 
 class SignupForm(UserCreationForm):
@@ -69,3 +69,52 @@ class CakeForm(forms.ModelForm):
         if not cleaned.get('photo') and not has_existing_image:
             self.add_error('photo', "Please upload a photo of the cake.")
         return cleaned
+
+
+# =====================================================
+# CUSTOMISATION OPTION FORM
+# Validates an option entered on the admin Customisation
+# Options page. The selected category is supplied by the
+# view, so an administrator only needs to enter its name.
+# =====================================================
+class CustomisationOptionForm(forms.ModelForm):
+    name = forms.CharField(
+        max_length=100,
+        strip=True,
+        label='',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Add new option...',
+            'autocomplete': 'off',
+        }),
+    )
+
+    class Meta:
+        model = CustomisationOption
+        fields = ('name',)
+
+    def __init__(self, *args, category, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.category = category
+
+    def clean_name(self):
+        name = self.cleaned_data['name'].strip()
+
+        # Server-side validation prevents duplicates even when
+        # they use different capitalisation, e.g. Vanilla/vanilla.
+        duplicate_exists = CustomisationOption.objects.filter(
+            category=self.category,
+            name__iexact=name,
+        ).exists()
+        if duplicate_exists:
+            raise forms.ValidationError(
+                "This option already exists in the selected category."
+            )
+
+        return name
+
+    def save(self, commit=True):
+        option = super().save(commit=False)
+        option.category = self.category
+        if commit:
+            option.save()
+        return option
