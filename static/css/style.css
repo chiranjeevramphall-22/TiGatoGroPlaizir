@@ -1287,3 +1287,264 @@ button.tag.selected {
     color: #6a5445;
     line-height: 1.4;
 }
+
+/* ===================================================== */
+/* ADMIN CAKE CATALOGUE PAGE                             */
+/* @k.d                                                  */
+/* ===================================================== */
+ 
+/* Sidebar active link: dark fill with a terracotta outline  */
+.admin-nav-link.active {
+    background-color: #3a2820;
+    color: #f4ead5;
+    font-weight: normal;
+    box-shadow: inset 0 0 0 1px #c9826a;
+}
+ 
+/* Shared card look for the form and the table */
+.catalogue-card {
+    background-color: #f3ebe0;
+    border-radius: 20px;
+    max-width: 900px;
+}
+ 
+/* ---------- Form card ---------- */
+.catalogue-form-card {
+    border: 2px solid #c9826a;
+    padding: 22px 26px 26px;
+    margin-bottom: 32px;
+}
+ 
+.catalogue-form-card h2 {
+    text-align: center;
+    font-size: 18px;
+    color: #2b1d16;
+    margin-bottom: 22px;
+}
+ 
+.catalogue-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 20px;
+}
+ 
+.catalogue-full {
+    grid-column: 1 / -1;
+}
+ 
+.catalogue-field label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #6a5445;
+    margin-bottom: 8px;
+}
+ 
+.catalogue-field input[type="text"],
+.catalogue-field input[type="number"],
+.catalogue-field select,
+.catalogue-field textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background-color: #fbf7f0;
+    border: 1px solid #e4d9c9;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #2b1d16;
+    outline: none;
+}
+ 
+.catalogue-field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+ 
+.catalogue-field input:focus,
+.catalogue-field select:focus,
+.catalogue-field textarea:focus {
+    border-color: #c9826a;
+}
+ 
+/* The real file input is hidden; this label acts as the visible box */
+.catalogue-field input[type="file"] {
+    display: none;
+}
+ 
+.catalogue-field label.catalogue-upload {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    margin-bottom: 0;
+    background-color: #fbf7f0;
+    border: 1px solid #e4d9c9;
+    border-radius: 12px;
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #9a8a7a;
+    cursor: pointer;
+}
+ 
+.catalogue-upload:hover {
+    border-color: #c9826a;
+}
+ 
+.catalogue-error {
+    color: #a4262c;
+    font-size: 12px;
+    margin-top: 6px;
+}
+ 
+.catalogue-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 18px;
+    margin-top: 22px;
+}
+ 
+.catalogue-submit {
+    background-color: #c9826a;
+    color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 28px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+ 
+.catalogue-submit:hover {
+    background-color: #b5705a;
+}
+ 
+.catalogue-cancel {
+    color: #6a5445;
+    font-size: 14px;
+    text-decoration: none;
+}
+ 
+.catalogue-cancel:hover {
+    text-decoration: underline;
+}
+ 
+/* ---------- Table card ---------- */
+.catalogue-table-card {
+    padding: 8px 10px 20px;
+}
+ 
+.catalogue-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+ 
+.catalogue-table thead th {
+    text-align: left;
+    padding: 20px 24px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #c9826a;
+    font-weight: normal;
+    border-bottom: 1px solid #e4d9c9;
+}
+ 
+.catalogue-table tbody td {
+    padding: 16px 24px;
+    color: #2b1d16;
+    border-bottom: 1px solid #e9dfd0;
+    vertical-align: middle;
+}
+ 
+.catalogue-table tbody tr:last-child td {
+    border-bottom: none;
+}
+ 
+.catalogue-empty {
+    text-align: center;
+    padding: 40px 0 !important;
+    color: #9a8a7a !important;
+}
+ 
+/* Availability pills */
+.status-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+ 
+.status-available {
+    background-color: #d5f5e3;
+    color: #1e6b46;
+}
+ 
+.status-unavailable {
+    background-color: #fde1e4;
+    color: #a4262c;
+}
+ 
+/* Edit / Remove buttons */
+.catalogue-row-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+ 
+.catalogue-row-actions form {
+    margin: 0;
+}
+ 
+.row-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #e0d4c3;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #2b1d16;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+ 
+.row-btn:hover {
+    background-color: #fbf7f0;
+}
+ 
+.row-btn-remove {
+    color: #a4262c;
+}
+ 
+/* Unavailable cakes on the public Our Cakes page: dimmed photo with a centred label */
+.cake-card-image {
+    position: relative;
+}
+
+.cake-card-image.is-unavailable::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(43, 29, 22, 0.6);
+}
+
+.unavailable-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+ 
+@media (max-width: 800px) {
+    .catalogue-grid {
+        grid-template-columns: 1fr;
+    }
+}

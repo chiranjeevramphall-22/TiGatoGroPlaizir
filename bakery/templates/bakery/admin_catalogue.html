@@ -1,0 +1,128 @@
+{% extends 'bakery/admin_base.html' %}
+{% load static %}
+ 
+{# ===================================================== #}
+{# ADMIN CAKE CATALOGUE PAGE                             #}
+{# Top: form to add (or edit) a cake design.             #}
+{# Bottom: table of all cakes with Edit / Remove.        #}
+{# ===================================================== #}
+ 
+{% block admin_content %}
+ 
+<div class="admin-page-header">
+    <h1>Cake Catalogue</h1>
+    <p>Add, update, remove designs and manage availability</p>
+</div>
+ 
+{# ============ ADD / EDIT FORM ============ #}
+<section class="catalogue-card catalogue-form-card" id="cake-form">
+    <h2>{% if editing %}Edit Cake Design{% else %}New Cake Design{% endif %}</h2>
+ 
+    <form method="post" enctype="multipart/form-data"
+          action="{% if editing %}{% url 'admin_cake_edit' editing.id %}{% else %}{% url 'admin_catalogue' %}{% endif %}">
+        {% csrf_token %}
+ 
+        <div class="catalogue-grid">
+ 
+            <div class="catalogue-field">
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                {{ form.name }}
+                {% for error in form.name.errors %}<p class="catalogue-error">{{ error }}</p>{% endfor %}
+            </div>
+ 
+            <div class="catalogue-field">
+                <label for="{{ form.base_price.id_for_label }}">{{ form.base_price.label }}</label>
+                {{ form.base_price }}
+                {% for error in form.base_price.errors %}<p class="catalogue-error">{{ error }}</p>{% endfor %}
+            </div>
+ 
+            <div class="catalogue-field">
+                <label for="{{ form.photo.id_for_label }}">{{ form.photo.label }}</label>
+                <label class="catalogue-upload" for="{{ form.photo.id_for_label }}">
+                    <span id="upload-text">
+                        {% if editing and editing.photo %}{{ editing.photo.name|cut:"cakes/" }}
+                        {% elif editing and editing.image %}{{ editing.image }}
+                        {% else %}Upload Photo{% endif %}
+                    </span>
+                    <span class="catalogue-upload-plus">+</span>
+                </label>
+                {{ form.photo }}
+                {% for error in form.photo.errors %}<p class="catalogue-error">{{ error }}</p>{% endfor %}
+            </div>
+ 
+            <div class="catalogue-field">
+                <label for="{{ form.is_available.id_for_label }}">{{ form.is_available.label }}</label>
+                {{ form.is_available }}
+            </div>
+ 
+            <div class="catalogue-field catalogue-full">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                {% for error in form.description.errors %}<p class="catalogue-error">{{ error }}</p>{% endfor %}
+            </div>
+ 
+        </div>
+ 
+        <div class="catalogue-actions">
+            {% if editing %}<a href="{% url 'admin_catalogue' %}" class="catalogue-cancel">Cancel</a>{% endif %}
+            <button type="submit" class="catalogue-submit">
+                {% if editing %}Save Changes{% else %}+ Add Cake{% endif %}
+            </button>
+        </div>
+    </form>
+</section>
+ 
+{# ============ CAKE TABLE ============ #}
+<section class="catalogue-card catalogue-table-card">
+    <table class="catalogue-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Base Price</th>
+                <th>Availability</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cake in cakes %}
+            <tr>
+                <td>{{ cake.name }}</td>
+                <td>Rs {{ cake.base_price|floatformat:"0g" }}</td>
+                <td>
+                    {% if cake.is_available %}
+                        <span class="status-pill status-available">Available</span>
+                    {% else %}
+                        <span class="status-pill status-unavailable">Unavailable</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="catalogue-row-actions">
+                        <a href="{% url 'admin_cake_edit' cake.id %}#cake-form" class="row-btn">Edit</a>
+                        <form method="post" action="{% url 'admin_cake_delete' cake.id %}"
+                              onsubmit="return confirm('Remove {{ cake.name|escapejs }} from the catalogue?');">
+                            {% csrf_token %}
+                            <button type="submit" class="row-btn row-btn-remove">Remove</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="catalogue-empty">No cakes yet. Add your first design above.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+ 
+<script>
+    // Show the chosen file name inside the "Upload Photo" box
+    const photoInput = document.getElementById('{{ form.photo.id_for_label }}');
+    photoInput.addEventListener('change', function () {
+        if (this.files.length) {
+            document.getElementById('upload-text').textContent = this.files[0].name;
+        }
+    });
+</script>
+ 
+{% endblock %}

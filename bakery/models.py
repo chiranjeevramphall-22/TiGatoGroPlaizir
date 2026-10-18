@@ -1,12 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 
 class Cake(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     base_price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.CharField(max_length=200, help_text="Filename only, e.g., victoria-sponge.jpg")
-    
+    image = models.CharField(max_length=200, blank=True, help_text="Filename only, e.g., victoria-sponge.jpg")
+    photo = models.ImageField(upload_to='cakes/', blank=True)
+    is_available = models.BooleanField(default=True)
+
+    @property
+    def image_url(self):
+        if self.photo:
+            return self.photo.url
+        if self.image:
+            return static('images/' + self.image)
+        return ''
+ 
     def __str__(self):
         return self.name
 

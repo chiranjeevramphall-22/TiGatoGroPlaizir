@@ -12,7 +12,10 @@
 <div class="cake-grid">
     {% for cake in cakes %}
     <div class="cake-card">
-        <img src="{% static 'images/' %}{{ cake.image }}" alt="{{ cake.name }}">
+        <div class="cake-card-image{% if not cake.is_available %} is-unavailable{% endif %}">
+            <img src="{{ cake.image_url }}" alt="{{ cake.name }}">
+            {% if not cake.is_available %}<span class="unavailable-label">Unavailable</span>{% endif %}
+        </div>
         <div class="cake-card-body">
             <div class="cake-card-header">
                 <h3>{{ cake.name }}</h3>

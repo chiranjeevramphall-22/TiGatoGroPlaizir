@@ -4,9 +4,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-
 from .models import Cake, Profile, Order
-from .forms import SignupForm
+from .forms import SignupForm, CakeForm
+from django.views.decorators.http import require_POST
 
 # =====================================================
 # PUBLIC PAGES
@@ -173,3 +173,58 @@ def admin_customers(request):
         'active_page': 'customers',   # Tells the sidebar which link is active
     }
     return render(request, 'bakery/admin_customers.html', context)
+
+# =====================================================
+# ADMIN: CAKE CATALOGUE PAGE
+# Add, edit and remove cake designs, and switch
+# availability on or off. Staff only.
+# @k.d
+# =====================================================
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_catalogue(request):
+    if request.method == 'POST':
+        form = CakeForm(request.POST, request.FILES)
+        if form.is_valid():
+            cake = form.save()
+            messages.success(request, f"\"{cake.name}\" was added to the catalogue.")
+            return redirect('admin_catalogue')
+    else:
+        form = CakeForm()
+ 
+    return render(request, 'bakery/admin_catalogue.html', {
+        'form': form,
+        'cakes': Cake.objects.order_by('id'),
+        'active_page': 'catalogue',
+    })
+ 
+ 
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_cake_edit(request, cake_id):
+    cake = get_object_or_404(Cake, pk=cake_id)
+ 
+    if request.method == 'POST':
+        form = CakeForm(request.POST, request.FILES, instance=cake)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"\"{cake.name}\" was updated.")
+            return redirect('admin_catalogue')
+    else:
+        form = CakeForm(instance=cake)
+ 
+    return render(request, 'bakery/admin_catalogue.html', {
+        'form': form,
+        'cakes': Cake.objects.order_by('id'),
+        'editing': cake,
+        'active_page': 'catalogue',
+    })
+ 
+ 
+@require_POST
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_cake_delete(request, cake_id):
+    cake = get_object_or_404(Cake, pk=cake_id)
+    name = cake.name
+    cake.delete()   # Orders keep existing: Order.cake is SET_NULL
+    messages.success(request, f"\"{name}\" was removed from the catalogue.")
+    return redirect('admin_catalogue')
+

@@ -137,3 +137,7 @@ MAILERS = {
 
 # Login redirect
 LOGIN_REDIRECT_URL = 'home'
+
+# Uploaded files (cake photos added from the admin Cake Catalogue page)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'

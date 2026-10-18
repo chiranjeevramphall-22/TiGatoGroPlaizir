@@ -16,7 +16,7 @@
 
         <!-- Left: Image -->
         <div class="cake-detail-image">
-            <img src="{% static 'images/' %}{{ cake.image }}" alt="{{ cake.name }}">
+            <img src="{{ cake.image_url }}" alt="{{ cake.name }}">
         </div>
 
         <!-- Right: Info -->

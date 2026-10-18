@@ -18,6 +18,9 @@ urlpatterns = [
     # Admin panel
     path('admin-login/', views.admin_login, name='admin_login'),
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    path('admin-customers/', views.admin_customers, name='admin_customers'),   # <-- NEW
+    path('admin-customers/', views.admin_customers, name='admin_customers'),
+    path('admin-catalogue/', views.admin_catalogue, name='admin_catalogue'),
+    path('admin-catalogue/<int:cake_id>/edit/', views.admin_cake_edit, name='admin_cake_edit'),
+    path('admin-catalogue/<int:cake_id>/delete/', views.admin_cake_delete, name='admin_cake_delete'),
 ]
 

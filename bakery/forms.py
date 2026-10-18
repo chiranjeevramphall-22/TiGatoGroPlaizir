@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, Cake
 
 
 class SignupForm(UserCreationForm):
@@ -28,3 +28,44 @@ class SignupForm(UserCreationForm):
                 delivery_address=self.cleaned_data['delivery_address'],
             )
         return user
+
+# =====================================================
+# CAKE FORM (admin Cake Catalogue page)
+# Used for both "New Cake Design" and "Edit".
+# @k.d
+# =====================================================
+class CakeForm(forms.ModelForm):
+    is_available = forms.TypedChoiceField(
+        label="Availability",
+        choices=[(True, 'Available'), (False, 'Unavailable')],
+        coerce=lambda value: value == 'True',
+        initial=True,
+    )
+ 
+    class Meta:
+        model = Cake
+        fields = ('name', 'base_price', 'photo', 'is_available', 'description')
+        labels = {
+            'name': 'Cake Name',
+            'base_price': 'Base Price (Rs)',
+            'photo': 'Design/Reference Image',
+        }
+        widgets = {
+            'base_price': forms.NumberInput(attrs={'min': 0, 'step': '1', 'placeholder': '0'}),
+            'photo': forms.FileInput(attrs={'accept': 'image/*'}),
+            'description': forms.Textarea(attrs={'rows': 3}),
+        }
+ 
+    def clean_base_price(self):
+        price = self.cleaned_data['base_price']
+        if price < 0:
+            raise forms.ValidationError("Price cannot be negative.")
+        return price
+ 
+    def clean(self):
+        cleaned = super().clean()
+        # A brand-new cake needs a picture, otherwise the cards on the site show a broken image
+        has_existing_image = bool(self.instance.pk and (self.instance.photo or self.instance.image))
+        if not cleaned.get('photo') and not has_existing_image:
+            self.add_error('photo', "Please upload a photo of the cake.")
+        return cleaned
