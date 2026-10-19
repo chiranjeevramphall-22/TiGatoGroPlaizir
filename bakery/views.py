@@ -57,7 +57,7 @@ def custom_logout(request):
 
 from django.shortcuts import render
 
-# =====================================================
+# # =====================================================
 # CUSTOMISE VIEW
 # Shows the customise page + handles custom order submission
 # =====================================================
@@ -73,9 +73,14 @@ def customise(request):
         custom_decorations = request.POST.get('custom_decorations', '')
         customer_notes = request.POST.get('customer_notes', '')
 
+        # NEW: Get the optional event details
+        cake_type = request.POST.get('cake_type', '')
+        theme = request.POST.get('theme', '')
+        colour_scheme = request.POST.get('colour_scheme', '')
+        required_date = request.POST.get('required_date') or None  # empty string becomes None
+
         # Server-side validation confirms that submitted values are
-        # still active options from the database. This cannot be
-        # bypassed by changing the HTML in the browser.
+        # still active options from the database.
         required_selections = {
             'size': custom_size,
             'flavour': custom_flavour,
@@ -120,19 +125,24 @@ def customise(request):
         # Create the custom order in the database
         order = Order.objects.create(
             customer=request.user,
-            cake=None,                    # No specific cake linked
-            is_custom=True,               # Mark it as a custom order
+            cake=None,
+            is_custom=True,
             custom_size=custom_size,
             custom_flavour=custom_flavour,
             custom_filling=custom_filling,
             custom_frosting=custom_frosting,
             custom_decorations=custom_decorations,
             customer_notes=customer_notes,
-            total_price=0,                # Price will be set by the baker
-            payment_method='discuss',     # Custom orders discuss payment
+            total_price=0,
+            payment_method='discuss',
             delivery_address=delivery_address,
             phone_number=phone_number,
             status='pending',
+            # NEW: Save event details to the order
+            cake_type=cake_type,
+            theme=theme,
+            colour_scheme=colour_scheme,
+            required_date=required_date,
         )
         
         # Show success message
@@ -142,12 +152,9 @@ def customise(request):
             f"We will contact you shortly to confirm the details and price."
         )
         
-        # Redirect back to the customise page
         return redirect('customise')
     
     # ---------- SHOW DATABASE-DRIVEN OPTIONS ----------
-    # Changes made by the administrator are immediately reflected
-    # on the public Customise page.
     context = {
         'size_options': CustomisationOption.objects.filter(category='size'),
         'flavour_options': CustomisationOption.objects.filter(category='flavour'),

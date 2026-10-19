@@ -92,6 +92,13 @@ class Order(models.Model):
             return f"Order #{self.id} - CUSTOM - {self.customer.username}"
         return f"Order #{self.id} - {self.customer.username} - {self.cake.name if self.cake else 'Deleted'}"
 
+    # ---------- EVENT DETAILS (Optional extended form) ----------
+    cake_type = models.CharField(max_length=100, blank=True)
+    theme = models.CharField(max_length=100, blank=True)
+    colour_scheme = models.CharField(max_length=100, blank=True)
+    required_date = models.DateField(null=True, blank=True)
+    personalised_message = models.TextField(blank=True)
+
 
 # =====================================================
 # CUSTOMISATION OPTION MODEL

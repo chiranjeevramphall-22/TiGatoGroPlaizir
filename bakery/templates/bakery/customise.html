@@ -78,7 +78,7 @@
             <h3><span class="icon">→</span> How to Order</h3>
             <div class="tags">
                 <span class="info-tag">1. Select your custom choices</span>
-                <span class="info-tag">2. Create a free account</span>
+                <span class="info-tag">2. Add optional event details</span>
                 <span class="info-tag">3. Submit your order</span>
                 <span class="info-tag">4. We confirm & bake!</span>
             </div>
@@ -89,6 +89,15 @@
     <section class="summary-box" id="summaryBox">
         <h3>Your Custom Selection</h3>
         <p id="summaryText">No options selected yet. Click the buttons above to customize!</p>
+        
+        <!-- NEW: Button to open the Event Details Modal -->
+        <button type="button" id="openEventModalBtn" class="btn-secondary" style="margin-top: 15px; background: transparent; border: 1px solid #c88d72; color: #c88d72; padding: 8px 16px; border-radius: 20px; cursor: pointer;">
+            + Add Event Details (Optional)
+        </button>
+        <!-- NEW: A small text to show if event details have been added -->
+        <p id="eventDetailsStatus" style="font-size: 12px; color: #c88d72; margin-top: 8px; display: none;">
+            ✓ Event details added.
+        </p>
     </section>
 
     <!-- ===================================================== -->
@@ -108,13 +117,13 @@
     {% else %}
     <section class="cta-section">
 
-        {# --- Optional notes box for the customer --- #}
+        {# --- CHANGE: Renamed label to PERSONALISED MESSAGE --- #}
         <div class="notes-box">
             <label for="customer_notes" class="option-label" style="text-align:left; display:block; margin-bottom:8px;">
-                ANY EXTRA REQUESTS? (optional)
+                PERSONALISED MESSAGE (optional)
             </label>
             <textarea id="customer_notes" name="customer_notes" rows="3" 
-                    placeholder="e.g. 'Please write Happy Birthday on top' or 'No nuts please'"></textarea>
+                    placeholder="e.g. 'Happy Birthday Priya!' or 'No nuts please'"></textarea>
         </div>
 
         {# --- The form that submits the order --- #}
@@ -129,6 +138,12 @@
             <input type="hidden" name="custom_decorations" id="form_decorations">
             <input type="hidden" name="customer_notes" id="form_notes">
             
+            {# NEW: Hidden fields for the optional Event Details #}
+            <input type="hidden" name="cake_type" id="form_cake_type">
+            <input type="hidden" name="theme" id="form_theme">
+            <input type="hidden" name="colour_scheme" id="form_colour_scheme">
+            <input type="hidden" name="required_date" id="form_required_date">
+            
             <button type="submit" class="btn-primary" id="placeOrderBtn" disabled>
                 Place Custom Order
             </button>
@@ -141,6 +156,54 @@
     {% endif %}
 </main>
 
+<!-- ===================================================== -->
+<!-- NEW: EVENT DETAILS MODAL (Popup)                      -->
+<!-- ===================================================== -->
+<div id="eventModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Event Details (Optional)</h2>
+            <button type="button" class="modal-close" id="closeEventModalBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 13px; color: #6a5445; margin-bottom: 20px;">
+                Tell us more about your occasion to help us design the perfect cake.
+            </p>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="modal_cake_type" style="font-size: 11px; letter-spacing: 1px; color: #6a5445; text-transform: uppercase; display: block; margin-bottom: 6px;">Cake Type</label>
+                <select id="modal_cake_type" style="width: 100%; padding: 10px; border: 1px solid #e0d5c5; border-radius: 8px; background: #fff;">
+                    <option value="">Select an occasion...</option>
+                    <option value="Birthday">Birthday</option>
+                    <option value="Wedding">Wedding</option>
+                    <option value="Anniversary">Anniversary</option>
+                    <option value="Baby Shower">Baby Shower</option>
+                    <option value="Corporate">Corporate Event</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="modal_theme" style="font-size: 11px; letter-spacing: 1px; color: #6a5445; text-transform: uppercase; display: block; margin-bottom: 6px;">Theme</label>
+                <input type="text" id="modal_theme" placeholder="e.g. Garden Flowers, Classic Elegance" style="width: 100%; padding: 10px; border: 1px solid #e0d5c5; border-radius: 8px; background: #fff;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="modal_colour_scheme" style="font-size: 11px; letter-spacing: 1px; color: #6a5445; text-transform: uppercase; display: block; margin-bottom: 6px;">Colour Scheme</label>
+                <input type="text" id="modal_colour_scheme" placeholder="e.g. Pastel pink & green, White & gold" style="width: 100%; padding: 10px; border: 1px solid #e0d5c5; border-radius: 8px; background: #fff;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="modal_required_date" style="font-size: 11px; letter-spacing: 1px; color: #6a5445; text-transform: uppercase; display: block; margin-bottom: 6px;">Required Date</label>
+                <input type="date" id="modal_required_date" style="width: 100%; padding: 10px; border: 1px solid #e0d5c5; border-radius: 8px; background: #fff;">
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align: right; margin-top: 20px;">
+            <button type="button" id="saveEventDetailsBtn" class="btn-primary" style="padding: 10px 20px; font-size: 13px;">Save Details</button>
+        </div>
+    </div>
+</div>
+
 <!-- JavaScript for Interactivity -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -151,6 +214,14 @@ document.addEventListener("DOMContentLoaded", function() {
         filling: null,
         frosting: null,
         decorations: []
+    };
+
+    // NEW: Stores the event details
+    const eventDetails = {
+        cake_type: '',
+        theme: '',
+        colour_scheme: '',
+        required_date: ''
     };
 
     const cards = document.querySelectorAll(".option-card[data-category]");
@@ -166,7 +237,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 const val = this.dataset.value;
 
                 if (isSingle) {
-                    // Single-select: only one option at a time
                     buttons.forEach(b => b.classList.remove("selected"));
                     if (selections[category] === val) {
                         selections[category] = null;
@@ -175,7 +245,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         selections[category] = val;
                     }
                 } else {
-                    // Multi-select (decorations): toggle on/off
                     this.classList.toggle("selected");
                     if (this.classList.contains("selected")) {
                         selections.decorations.push(val);
@@ -217,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('form_frosting').value = selections.frosting || '';
         document.getElementById('form_decorations').value = selections.decorations.join(', ');
 
-        // Enable the "Place Order" button only if at least size & flavour are chosen
+        // Enable the "Place Order" button only if size, flavour, filling, frosting are chosen
         const btn = document.getElementById('placeOrderBtn');
         if (btn) {
             const ready = selections.size && selections.flavour && selections.filling && selections.frosting;
@@ -232,6 +301,62 @@ document.addEventListener("DOMContentLoaded", function() {
             const notes = document.getElementById('customer_notes');
             if (notes) {
                 document.getElementById('form_notes').value = notes.value;
+            }
+            // NEW: Copy event details into hidden fields
+            document.getElementById('form_cake_type').value = eventDetails.cake_type;
+            document.getElementById('form_theme').value = eventDetails.theme;
+            document.getElementById('form_colour_scheme').value = eventDetails.colour_scheme;
+            document.getElementById('form_required_date').value = eventDetails.required_date;
+        });
+    }
+
+    // =====================================================
+    // NEW: EVENT DETAILS MODAL LOGIC
+    // =====================================================
+    const modal = document.getElementById('eventModal');
+    const openBtn = document.getElementById('openEventModalBtn');
+    const closeBtn = document.getElementById('closeEventModalBtn');
+    const saveBtn = document.getElementById('saveEventDetailsBtn');
+    const statusText = document.getElementById('eventDetailsStatus');
+
+    // Open modal
+    if (openBtn) {
+        openBtn.addEventListener('click', function() {
+            modal.style.display = 'flex';
+        });
+    }
+
+    // Close modal via X button
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal by clicking outside
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    // Save event details
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            eventDetails.cake_type = document.getElementById('modal_cake_type').value;
+            eventDetails.theme = document.getElementById('modal_theme').value;
+            eventDetails.colour_scheme = document.getElementById('modal_colour_scheme').value;
+            eventDetails.required_date = document.getElementById('modal_required_date').value;
+
+            modal.style.display = 'none';
+
+            // Show a small status if details were added
+            if (eventDetails.cake_type || eventDetails.theme || eventDetails.colour_scheme || eventDetails.required_date) {
+                statusText.style.display = 'block';
+            } else {
+                statusText.style.display = 'none';
             }
         });
     }

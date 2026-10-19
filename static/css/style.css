@@ -1098,6 +1098,59 @@ button.tag.selected {
 }
 
 /* ===================================================== */
+/* (Popup for Event Details)                       */
+/* ===================================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(43, 29, 22, 0.7);
+    z-index: 2000;
+    display: flex; /* Hidden by default via inline style, but flex when shown */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: #fdfaf5;
+    border-radius: 12px;
+    padding: 30px 35px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    color: #2b1d16;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    color: #6a5445;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #c0392b;
+}
+
+/* ===================================================== */
 /* ADMIN LAYOUT (sidebar + content) (by Avanish)         */
 /* ===================================================== */
 
