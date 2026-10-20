@@ -1,0 +1,134 @@
+{% extends 'bakery/admin_base.html' %}
+{% load static %}
+
+{% block admin_content %}
+
+<div class="admin-page-header">
+    <h1>Custom Cake Requests</h1>
+    <p>Review, approve/reject, and set prices for custom requests</p>
+</div>
+
+<div class="admin-requests-list">
+
+    {% for order in custom_orders %}
+    <div class="request-card">
+        
+        {# --- Card Header: Customer Name & Status --- #}
+        <div class="request-card-header">
+            <div>
+                <h3>{{ order.customer.profile.full_name|default:order.customer.username }}</h3>
+                <p class="request-meta">Request #{{ order.id|stringformat:"03d" }} - Submitted {{ order.created_at|date:"Y-m-d" }}</p>
+            </div>
+            <span class="status-pill 
+                {% if order.status == 'pending' %}status-pending
+                {% elif order.status == 'confirmed' %}status-approved
+                {% elif order.status == 'cancelled' %}status-rejected
+                {% endif %}">
+                {{ order.get_status_display }}
+            </span>
+        </div>
+
+        <div class="request-card-body">
+            
+            {# --- Section 1: Mandatory Cake Options --- #}
+            <div class="request-section">
+                <p class="section-label" style="margin-bottom:8px;">CAKE OPTIONS SELECTED</p>
+                <div class="request-grid">
+                    <div>
+                        <span class="request-label">SIZE</span>
+                        <p>{{ order.custom_size|default:"Not specified" }}</p>
+                    </div>
+                    <div>
+                        <span class="request-label">FLAVOUR</span>
+                        <p>{{ order.custom_flavour|default:"Not specified" }}</p>
+                    </div>
+                    <div>
+                        <span class="request-label">FILLING</span>
+                        <p>{{ order.custom_filling|default:"Not specified" }}</p>
+                    </div>
+                    <div>
+                        <span class="request-label">FROSTING</span>
+                        <p>{{ order.custom_frosting|default:"Not specified" }}</p>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <span class="request-label">DECORATIONS</span>
+                        <p>{{ order.custom_decorations|default:"None selected" }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {# --- Section 2: Optional Event Details --- #}
+            {% if order.cake_type or order.theme or order.colour_scheme or order.required_date %}
+            <div class="request-section">
+                <p class="section-label" style="margin-bottom:8px;">EVENT DETAILS</p>
+                <div class="request-grid">
+                    <div>
+                        <span class="request-label">CAKE TYPE</span>
+                        <p>{{ order.cake_type|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <span class="request-label">THEME</span>
+                        <p>{{ order.theme|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <span class="request-label">COLOUR SCHEME</span>
+                        <p>{{ order.colour_scheme|default:"—" }}</p>
+                    </div>
+                    <div>
+                        <span class="request-label">REQUIRED DATE</span>
+                        <p>{{ order.required_date|date:"Y-m-d"|default:"—" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {# --- Section 3: Personalised Message --- #}
+            <div class="request-section">
+                <p class="section-label" style="margin-bottom:8px;">PERSONALISED MESSAGE</p>
+                <div class="request-message-box">
+                    {{ order.customer_notes|default:"No personalised message provided." }}
+                </div>
+            </div>
+
+            {# --- Section 4: Admin Actions (Only for Pending orders) --- #}
+            {% if order.status == 'pending' %}
+            <div class="request-actions">
+                <form method="POST"> 
+                    {% csrf_token %}
+                    <!-- NEW: Tell the backend which order this is -->
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+                    
+                    <!-- Note: 'required' is removed from price so the Reject button works without a price -->
+                    <input type="number" name="price" placeholder="Set price (Rs)" class="price-input">
+                    <input type="text" name="admin_notes" placeholder="Add admin note..." class="note-input">
+                    
+                    <button type="submit" name="action" value="approve" class="btn-approve">Approve</button>
+                    <button type="submit" name="action" value="reject" class="btn-reject">Reject</button>
+                </form>
+            </div>
+            {% else %}
+            {# Show notes if already approved/rejected #}
+            {% if order.admin_notes %}
+            <div class="request-admin-notes">
+                <span class="request-label">ADMIN NOTES</span>
+                <p>{{ order.admin_notes }}</p>
+            </div>
+            {% endif %}
+            <p style="font-size:12px; color:#8b7d6f; margin-top:15px;">
+                {% if order.status == 'confirmed' %}Approved - Price set: Rs {{ order.total_price }}
+                {% elif order.status == 'cancelled' %}Rejected
+                {% endif %}
+            </p>
+            {% endif %}
+
+        </div>
+    </div>
+    {% empty %}
+    <div class="admin-table-container">
+        <p style="text-align:center; padding:40px; color:#a89786;">No custom requests found.</p>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

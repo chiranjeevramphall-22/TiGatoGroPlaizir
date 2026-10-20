@@ -98,6 +98,8 @@ class Order(models.Model):
     colour_scheme = models.CharField(max_length=100, blank=True)
     required_date = models.DateField(null=True, blank=True)
     personalised_message = models.TextField(blank=True)
+        # ---------- ADMIN NOTES ----------
+    admin_notes = models.TextField(blank=True, help_text="Internal notes from the baker")
 
 
 # =====================================================

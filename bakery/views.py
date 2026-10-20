@@ -337,3 +337,43 @@ def admin_customisation_option_delete(request, option_id):
         f"{reverse('admin_customisation_options')}?category={active_category}"
     )
 
+# =====================================================
+# ADMIN: CUSTOM REQUESTS PAGE
+# Shows all custom cake orders for the admin to review,
+# set prices, and approve/reject.
+# =====================================================
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_custom_requests(request):
+    # ---------- HANDLE THE APPROVE / REJECT BUTTON CLICK ----------
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        action = request.POST.get('action')
+        price = request.POST.get('price')
+        admin_notes = request.POST.get('admin_notes', '')
+        
+        # Find the specific order
+        order = get_object_or_404(Order, id=order_id, is_custom=True)
+        
+        if action == 'approve' and price:
+            order.total_price = price
+            order.admin_notes = admin_notes
+            order.status = 'confirmed'
+            order.save()
+            messages.success(request, f"Order #{order.id} has been approved with a price of Rs {price}.")
+            
+        elif action == 'reject':
+            order.admin_notes = admin_notes
+            order.status = 'cancelled'
+            order.save()
+            messages.error(request, f"Order #{order.id} has been rejected.")
+            
+        return redirect('admin_custom_requests')
+
+    # ---------- SHOW THE PAGE ----------
+    custom_orders = Order.objects.filter(is_custom=True).order_by('-created_at')
+    
+    context = {
+        'custom_orders': custom_orders,
+        'active_page': 'requests',
+    }
+    return render(request, 'bakery/admin_custom_requests.html', context)
