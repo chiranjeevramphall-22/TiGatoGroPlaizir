@@ -4,6 +4,12 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Cake, CustomisationOption
 
 
+# =====================================================
+# SIGNUP FORM
+# Handles customer registration.
+# Adds a friendly error message and suggestion if the
+# username is already taken.
+# =====================================================
 class SignupForm(UserCreationForm):
     # Extra fields not part of the default User model
     full_name = forms.CharField(max_length=200, label="Full Name")
@@ -14,6 +20,27 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'full_name', 'email', 'phone_number', 'delivery_address', 'password1', 'password2')
+
+    def clean_username(self):
+        # Get the username the user typed
+        username = self.cleaned_data.get('username')
+        
+        # Check if it already exists
+        if User.objects.filter(username__iexact=username).exists():
+            # Generate a suggestion (e.g. username123)
+            suggestion = f"{username}123"
+            # If even the suggestion is taken, add random numbers
+            counter = 1
+            while User.objects.filter(username__iexact=suggestion).exists():
+                suggestion = f"{username}{counter}"
+                counter += 1
+            
+            # Raise a validation error with the suggestion
+            raise forms.ValidationError(
+                f"This username is already taken. Try '{suggestion}' instead."
+            )
+        
+        return username
 
     def save(self, commit=True):
         user = super().save(commit=False)

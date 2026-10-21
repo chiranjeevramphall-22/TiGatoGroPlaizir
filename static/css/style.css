@@ -840,6 +840,55 @@ body {
     border: 1px solid #e0d5c5;
     font-weight: bold;
 }
+
+/* ===================================================== */
+/* SIGNUP PROMPT ON LOGIN PAGE                           */
+/* ===================================================== */
+
+.signup-prompt {
+    background-color: #f4ead5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.signup-prompt strong {
+    font-size: 14px;
+    color: #2b1d16;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.signup-prompt p {
+    font-size: 12px;
+    color: #6a5445;
+    margin-bottom: 12px;
+}
+
+.signup-prompt-btn {
+    background-color: #d19a7a;
+    color: #ffffff;
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.signup-prompt-btn:hover {
+    background-color: #b8805e;
+}
+
+.error-message {
+    color: #c0392b;
+    font-size: 12px;
+    margin-bottom: 15px;
+    background-color: #fde8e8;
+    padding: 10px;
+    border-radius: 6px;
+}
+
 /* ===================================================== */
 /* ORDER FORM (on Cake Detail page)                      */
 /* ===================================================== */

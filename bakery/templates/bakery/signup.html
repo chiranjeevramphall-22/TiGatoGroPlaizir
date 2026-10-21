@@ -20,6 +20,12 @@
 
             <label for="id_username">USERNAME</label>
             <input type="text" name="username" id="id_username" placeholder="Username" required>
+            {% if form.username.errors %}
+                <div class="error-message" id="username-error-box" style="margin-top: -15px; margin-bottom: 15px;">
+                    <span id="username-error-text">{{ form.username.errors.0 }}</span>
+                </div>
+            {% endif %}
+
 
             <label for="id_full_name">FULL NAME</label>
             <input type="text" name="full_name" id="id_full_name" placeholder="Full Name" required>
@@ -42,8 +48,12 @@
             <!-- Password errors (like passwords too short or don't match) -->
             {% if form.password1.errors or form.password2.errors %}
                 <div class="error-message">
-                    {{ form.password1.errors }}
-                    {{ form.password2.errors }}
+                    {% for error in form.password1.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                    {% for error in form.password2.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
                 </div>
             {% endif %}
 
@@ -52,5 +62,8 @@
     </div>
 
 </section>
+
+<!-- Load the signup interaction script -->
+<script src="{% static 'js/signup.js' %}"></script>
 
 {% endblock %}

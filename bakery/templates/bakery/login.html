@@ -1,6 +1,13 @@
 {% extends 'bakery/base.html' %}
 {% load static %}
 
+{# ===================================================== #}
+{# CUSTOMER LOGIN PAGE                                   #}
+{# If the user has no account, we clearly prompt them    #}
+{# to sign up before logging in.                         #}
+{# Shows error messages if login fails.                  #}
+{# ===================================================== #}
+
 {% block content %}
 
 <section class="auth-page" style="background-image: url('{% static "images/login-bg.jpg" %}');">
@@ -8,7 +15,14 @@
     <div class="auth-card">
         <p class="section-label">WELCOME BACK</p>
         <h1>Log In</h1>
-        <p class="auth-subtitle">No account yet? <a href="{% url 'signup' %}">Sign up here</a></p>
+        <p class="auth-subtitle">Log in to place orders and view your order history.</p>
+
+        {# --- Error messages for wrong username/password --- #}
+        {% if form.errors %}
+            <div class="error-message">
+                Invalid username or password. Please try again.
+            </div>
+        {% endif %}
 
         <form method="POST" class="auth-form">
             {% csrf_token %}
@@ -22,7 +36,13 @@
             <button type="submit" class="auth-btn">Log In</button>
         </form>
         
-        <p class="auth-footer">This is the login page.</p>
+        {# --- NEW: Signup Prompt BELOW the form --- #}
+        <div class="signup-prompt" style="margin-top: 25px; margin-bottom: 0;">
+            <strong>Don't have an account?</strong>
+            <p>You need to create one before placing any orders.</p>
+            <a href="{% url 'signup' %}" class="signup-prompt-btn">Create an Account</a>
+        </div>
+        
     </div>
 
 </section>

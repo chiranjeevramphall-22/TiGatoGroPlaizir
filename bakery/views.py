@@ -43,19 +43,38 @@ def signup(request):
     
     return render(request, 'bakery/signup.html', {'form': form})
 
+# =====================================================
+# CUSTOM LOGIN VIEW
+# Handles both customers and admins.
+# Shows a personalised welcome message, and gracefully
+# handles users who don't have a Profile yet (e.g. admins).
+# =====================================================
 class CustomLoginView(LoginView):
     template_name = 'bakery/login.html'
     
     def form_valid(self, form):
-        messages.success(self.request, f"Welcome back, {form.get_user().profile.full_name}! Ready to order? 🍰")
+        user = form.get_user()
+        
+        # Check if the user has a profile. If yes, use full name.
+        # If no (like an admin), fall back to the username.
+        if hasattr(user, 'profile'):
+            name = user.profile.full_name
+        else:
+            name = user.username
+        
+        messages.success(self.request, f"Welcome back, {name}! Ready to order? 🍰")
         return super().form_valid(form)
 
+# =====================================================
+# LOGOUT VIEW
+# Logs the user out and sends them back to the home page
+# with a friendly message.
+# =====================================================
 def custom_logout(request):
     logout(request)
     messages.info(request, "You have been logged out. See you soon! 👋")
     return redirect('home')
-
-from django.shortcuts import render
+    
 
 # # =====================================================
 # CUSTOMISE VIEW
@@ -168,7 +187,6 @@ def customise(request):
 # ADMIN LOGIN VIEW
 # Custom admin login — only staff accounts can log in.
 # =====================================================
-from django.contrib.auth import authenticate, login
 
 def admin_login(request):
     # If already logged in as staff, skip straight to dashboard
@@ -203,7 +221,6 @@ def admin_login(request):
 # Shows all registered customers (non-staff only).
 # Only accessible by staff users.
 # =====================================================
-from django.contrib.auth.decorators import user_passes_test
 
 # Helper function: checks if a user is a staff member
 def is_staff(user):
