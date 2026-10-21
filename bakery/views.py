@@ -450,3 +450,34 @@ def admin_custom_requests(request):
         'active_page': 'requests',
     }
     return render(request, 'bakery/admin_custom_requests.html', context)
+
+# =====================================================
+# ADMIN: CUSTOMER ORDERS PAGE
+# Shows all standard cake orders (not custom).
+# Allows the admin to update the status via buttons.
+# =====================================================
+@user_passes_test(is_staff, login_url='admin_login')
+def admin_orders(request):
+    
+    # ---------- HANDLE STATUS UPDATE BUTTON CLICK ----------
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        new_status = request.POST.get('status')
+        
+        # Find the specific order and update its status
+        order = get_object_or_404(Order, id=order_id, is_custom=False)
+        order.status = new_status
+        order.save()
+        
+        messages.success(request, f"Order #{order.id} status updated to {order.get_status_display()}.")
+        return redirect('admin_orders')
+
+    # ---------- SHOW THE PAGE ----------
+    # Get only standard orders (is_custom=False)
+    orders = Order.objects.filter(is_custom=False).order_by('-created_at')
+    
+    context = {
+        'orders': orders,
+        'active_page': 'orders',
+    }
+    return render(request, 'bakery/admin_orders.html', context)

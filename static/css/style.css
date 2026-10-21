@@ -17,8 +17,10 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 50px;
-    background-color: #fdfaf5; /* Light cream navbar */
-    border-bottom: 1px solid #efe8dd; /* <-- line seperator */
+    background-color: #fdfaf5;
+    /* Light cream navbar */
+    border-bottom: 1px solid #efe8dd;
+    /* <-- line seperator */
 }
 
 .navbar .logo a {
@@ -93,12 +95,15 @@ body {
 .hero::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(43, 29, 22, 0.5);
     z-index: 0;
 }
 
-.hero > * {
+.hero>* {
     position: relative;
     z-index: 1;
     max-width: 500px;
@@ -140,7 +145,7 @@ body {
     cursor: pointer;
     font-size: 14px;
     margin-right: 15px;
-    text-decoration: none; 
+    text-decoration: none;
     display: inline-block;
     font-family: 'Georgia', serif;
 }
@@ -189,7 +194,8 @@ body {
     line-height: 1.8;
 }
 
-.footer h3, .footer h4 {
+.footer h3,
+.footer h4 {
     color: #f4ead5;
     margin-bottom: 15px;
 }
@@ -246,7 +252,7 @@ body {
 
 .cake-card {
     background-color: #ffffff;
-    border: 1px solid #e8ddd0; 
+    border: 1px solid #e8ddd0;
     border-radius: 10px;
     overflow: hidden;
     color: #2b1d16;
@@ -294,7 +300,7 @@ body {
 
 .cake-card .price {
     font-size: 12px;
-    color: #8b6f52; 
+    color: #8b6f52;
     white-space: nowrap;
     font-weight: bold;
     padding-top: 3px;
@@ -458,10 +464,24 @@ body {
     border-color: #2b1d16;
 }
 
-.size-option strong { font-size: 13px; }
-.size-option span { font-size: 11px; color: #6a5445; }
-.size-option.selected span { color: #c9b8a8; }
-.size-option small { font-size: 11px; color: #d19a7a; margin-top: 3px; }
+.size-option strong {
+    font-size: 13px;
+}
+
+.size-option span {
+    font-size: 11px;
+    color: #6a5445;
+}
+
+.size-option.selected span {
+    color: #c9b8a8;
+}
+
+.size-option small {
+    font-size: 11px;
+    color: #d19a7a;
+    margin-top: 3px;
+}
 
 .price-estimate {
     display: flex;
@@ -473,7 +493,10 @@ body {
     margin-bottom: 25px;
 }
 
-.price-estimate h2 { font-size: 28px; color: #2b1d16; }
+.price-estimate h2 {
+    font-size: 28px;
+    color: #2b1d16;
+}
 
 .small-note {
     font-size: 10px;
@@ -495,7 +518,9 @@ body {
     transition: background 0.2s;
 }
 
-.order-btn:hover { background-color: #b8805e; }
+.order-btn:hover {
+    background-color: #b8805e;
+}
 
 .login-note {
     text-align: center;
@@ -503,7 +528,10 @@ body {
     color: #6a5445;
 }
 
-.login-note a { color: #d19a7a; text-decoration: none; }
+.login-note a {
+    color: #d19a7a;
+    text-decoration: none;
+}
 
 /* Overview */
 .overview-section {
@@ -540,12 +568,15 @@ body {
     margin-top: 20px;
 }
 
-.back-link:hover { text-decoration: underline; }
+.back-link:hover {
+    text-decoration: underline;
+}
 
 
 /* About Us Page */
 .about-page {
-    background-color: #2b1d16; /* Dark brown background */
+    background-color: #2b1d16;
+    /* Dark brown background */
     color: #f4ead5;
     padding: 80px 60px;
     min-height: calc(100vh - 200px);
@@ -628,7 +659,8 @@ body {
     background-size: cover;
     background-position: center;
     display: flex;
-    justify-content: center;  /* <-- Centered */
+    justify-content: center;
+    /* <-- Centered */
     align-items: center;
     padding: 60px 20px;
     position: relative;
@@ -638,7 +670,10 @@ body {
 .auth-page::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(43, 29, 22, 0.45);
     z-index: 0;
 }
@@ -745,8 +780,8 @@ body {
     margin-bottom: 20px;
     font-family: 'Georgia', serif;
     color: #2b1d16;
-    resize: none; 
-    height: 70px; 
+    resize: none;
+    height: 70px;
 }
 
 .auth-form textarea:focus {
@@ -800,7 +835,7 @@ body {
     border-radius: 10px;
     margin-bottom: 10px;
     font-size: 14px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
     animation: slideIn 0.4s ease-out;
 }
 
@@ -827,6 +862,7 @@ body {
         transform: translateX(100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -1152,10 +1188,14 @@ button.tag.selected {
 
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(43, 29, 22, 0.7);
     z-index: 2000;
-    display: flex; /* Hidden by default via inline style, but flex when shown */
+    display: flex;
+    /* Hidden by default via inline style, but flex when shown */
     justify-content: center;
     align-items: center;
     padding: 20px;
@@ -1205,14 +1245,16 @@ button.tag.selected {
 
 .admin-layout {
     display: grid;
-    grid-template-columns: 260px 1fr;   /* 260px sidebar, rest for content */
+    grid-template-columns: 260px 1fr;
+    /* 260px sidebar, rest for content */
     min-height: calc(100vh - 80px);
     background-color: #fdfaf5;
 }
 
 /* ---------- SIDEBAR ---------- */
 .admin-sidebar {
-    background-color: #1e1410;   /* Very dark brown */
+    background-color: #1e1410;
+    /* Very dark brown */
     color: #c9b8a8;
     display: flex;
     flex-direction: column;
@@ -1394,7 +1436,7 @@ button.tag.selected {
 /* ADMIN CAKE CATALOGUE PAGE                             */
 /* @k.d                                                  */
 /* ===================================================== */
- 
+
 /* Sidebar active link: dark fill with a terracotta outline  */
 .admin-nav-link.active {
     background-color: #3a2820;
@@ -1402,38 +1444,38 @@ button.tag.selected {
     font-weight: normal;
     box-shadow: inset 0 0 0 1px #c9826a;
 }
- 
+
 /* Shared card look for the form and the table */
 .catalogue-card {
     background-color: #f3ebe0;
     border-radius: 20px;
     max-width: 900px;
 }
- 
+
 /* ---------- Form card ---------- */
 .catalogue-form-card {
     border: 2px solid #c9826a;
     padding: 22px 26px 26px;
     margin-bottom: 32px;
 }
- 
+
 .catalogue-form-card h2 {
     text-align: center;
     font-size: 18px;
     color: #2b1d16;
     margin-bottom: 22px;
 }
- 
+
 .catalogue-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px 20px;
 }
- 
+
 .catalogue-full {
     grid-column: 1 / -1;
 }
- 
+
 .catalogue-field label {
     display: block;
     font-size: 12px;
@@ -1442,7 +1484,7 @@ button.tag.selected {
     color: #6a5445;
     margin-bottom: 8px;
 }
- 
+
 .catalogue-field input[type="text"],
 .catalogue-field input[type="number"],
 .catalogue-field select,
@@ -1456,23 +1498,23 @@ button.tag.selected {
     color: #2b1d16;
     outline: none;
 }
- 
+
 .catalogue-field textarea {
     resize: vertical;
     min-height: 90px;
 }
- 
+
 .catalogue-field input:focus,
 .catalogue-field select:focus,
 .catalogue-field textarea:focus {
     border-color: #c9826a;
 }
- 
+
 /* The real file input is hidden; this label acts as the visible box */
 .catalogue-field input[type="file"] {
     display: none;
 }
- 
+
 .catalogue-field label.catalogue-upload {
     display: flex;
     justify-content: space-between;
@@ -1488,17 +1530,17 @@ button.tag.selected {
     color: #9a8a7a;
     cursor: pointer;
 }
- 
+
 .catalogue-upload:hover {
     border-color: #c9826a;
 }
- 
+
 .catalogue-error {
     color: #a4262c;
     font-size: 12px;
     margin-top: 6px;
 }
- 
+
 .catalogue-actions {
     display: flex;
     justify-content: flex-end;
@@ -1506,7 +1548,7 @@ button.tag.selected {
     gap: 18px;
     margin-top: 22px;
 }
- 
+
 .catalogue-submit {
     background-color: #c9826a;
     color: #ffffff;
@@ -1517,32 +1559,32 @@ button.tag.selected {
     cursor: pointer;
     transition: background-color 0.2s;
 }
- 
+
 .catalogue-submit:hover {
     background-color: #b5705a;
 }
- 
+
 .catalogue-cancel {
     color: #6a5445;
     font-size: 14px;
     text-decoration: none;
 }
- 
+
 .catalogue-cancel:hover {
     text-decoration: underline;
 }
- 
+
 /* ---------- Table card ---------- */
 .catalogue-table-card {
     padding: 8px 10px 20px;
 }
- 
+
 .catalogue-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
 }
- 
+
 .catalogue-table thead th {
     text-align: left;
     padding: 20px 24px;
@@ -1553,24 +1595,24 @@ button.tag.selected {
     font-weight: normal;
     border-bottom: 1px solid #e4d9c9;
 }
- 
+
 .catalogue-table tbody td {
     padding: 16px 24px;
     color: #2b1d16;
     border-bottom: 1px solid #e9dfd0;
     vertical-align: middle;
 }
- 
+
 .catalogue-table tbody tr:last-child td {
     border-bottom: none;
 }
- 
+
 .catalogue-empty {
     text-align: center;
     padding: 40px 0 !important;
     color: #9a8a7a !important;
 }
- 
+
 /* Availability pills */
 .status-pill {
     display: inline-block;
@@ -1578,28 +1620,28 @@ button.tag.selected {
     border-radius: 20px;
     font-size: 13px;
 }
- 
+
 .status-available {
     background-color: #d5f5e3;
     color: #1e6b46;
 }
- 
+
 .status-unavailable {
     background-color: #fde1e4;
     color: #a4262c;
 }
- 
+
 /* Edit / Remove buttons */
 .catalogue-row-actions {
     display: flex;
     gap: 8px;
     align-items: center;
 }
- 
+
 .catalogue-row-actions form {
     margin: 0;
 }
- 
+
 .row-btn {
     display: inline-block;
     padding: 8px 16px;
@@ -1612,15 +1654,15 @@ button.tag.selected {
     cursor: pointer;
     transition: background-color 0.2s;
 }
- 
+
 .row-btn:hover {
     background-color: #fbf7f0;
 }
- 
+
 .row-btn-remove {
     color: #a4262c;
 }
- 
+
 /* Unavailable cakes on the public Our Cakes page: dimmed photo with a centred label */
 .cake-card-image {
     position: relative;
@@ -1644,7 +1686,7 @@ button.tag.selected {
     letter-spacing: 2px;
     text-transform: uppercase;
 }
- 
+
 @media (max-width: 800px) {
     .catalogue-grid {
         grid-template-columns: 1fr;
@@ -1873,9 +1915,21 @@ button.tag.selected {
     font-weight: bold;
     text-transform: uppercase;
 }
-.status-pending { background-color: #fce8c8; color: #b57a1e; }
-.status-approved { background-color: #d5f5e3; color: #1e6b46; }
-.status-rejected { background-color: #fde1e4; color: #a4262c; }
+
+.status-pending {
+    background-color: #fce8c8;
+    color: #b57a1e;
+}
+
+.status-approved {
+    background-color: #d5f5e3;
+    color: #1e6b46;
+}
+
+.status-rejected {
+    background-color: #fde1e4;
+    color: #a4262c;
+}
 
 /* Sections */
 .request-section {
@@ -1891,7 +1945,7 @@ button.tag.selected {
     border-radius: 8px;
 }
 
-.request-grid > div {
+.request-grid>div {
     display: flex;
     flex-direction: column;
 }
@@ -1932,7 +1986,8 @@ button.tag.selected {
     border-radius: 8px;
 }
 
-.price-input, .note-input {
+.price-input,
+.note-input {
     padding: 10px 12px;
     border: 1px solid #e0d5c5;
     border-radius: 6px;
@@ -1980,4 +2035,138 @@ button.tag.selected {
     font-size: 13px;
     color: #2b1d16;
     margin-top: 4px;
+}
+
+/* ===================================================== */
+/* ADMIN CUSTOMER ORDERS PAGE                            */
+/* ===================================================== */
+
+.admin-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+}
+
+.admin-order-card {
+    background-color: #f4ead5;
+    border-radius: 12px;
+    padding: 25px;
+    color: #2b1d16;
+}
+
+.admin-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.admin-order-header h3 {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    color: #2b1d16;
+    margin-bottom: 4px;
+}
+
+.admin-order-meta {
+    font-size: 12px;
+    color: #8b7d6f;
+}
+
+.admin-order-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    background-color: #fdfaf5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.admin-order-actions {
+    margin-top: 10px;
+}
+
+/* Status Buttons */
+.status-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #e0d5c5;
+    background-color: #ffffff;
+    color: #6a5445;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Georgia', serif;
+}
+
+.status-btn:hover {
+    border-color: #d19a7a;
+}
+
+/* The 'active' class highlights the button matching the current status */
+.status-btn.active {
+    background-color: #2b1d16;
+    color: #ffffff;
+    border-color: #2b1d16;
+}
+
+/* The TOP row: Size/Date/Total on the left, Customer info on the right */
+.admin-order-top-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+    /* Increased gap between the two main columns */
+    background-color: #fdfaf5;
+    padding: 25px;
+    /* More padding inside the box */
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 3px solid #d19a7a;
+}
+
+/* Inside the Order Info column */
+.order-info-col p {
+    margin-bottom: 20px;
+    /* More space below each value */
+    font-family: 'Georgia', serif;
+    color: #2b1d16;
+    font-size: 15px;
+}
+
+.order-info-col p:last-child {
+    margin-bottom: 0;
+    /* Remove extra space on the last item */
+}
+
+/* Inside the Customer Info column - add a subtle separator */
+.customer-info-col {
+    padding-left: 30px;
+    /* More space between the divider and the text */
+    border-left: 1px dashed #d19a7a;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Adds space between the Name, Phone, and Address blocks */
+}
+
+.customer-info-col p {
+    font-family: 'Georgia', serif;
+    color: #2b1d16;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+/* Make the labels look cleaner and add space below them */
+.request-label {
+    display: block;
+    margin-bottom: 5px;
+    /* Space between label and value */
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: #a89786;
+    text-transform: uppercase;
+    font-weight: bold;
 }

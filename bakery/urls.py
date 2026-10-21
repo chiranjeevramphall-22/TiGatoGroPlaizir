@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin-customisation-options/', views.admin_customisation_options, name='admin_customisation_options'),
     path('admin-customisation-options/<int:option_id>/delete/', views.admin_customisation_option_delete, name='admin_customisation_option_delete'),
     path('admin-custom-requests/', views.admin_custom_requests, name='admin_custom_requests'),
+    path('admin-orders/', views.admin_orders, name='admin_orders'),
 ]

@@ -1,0 +1,127 @@
+{% extends 'bakery/admin_base.html' %}
+{% load static %}
+
+{# ===================================================== #}
+{# ADMIN: CUSTOMER ORDERS PAGE #}
+{# Shows all standard orders with all info on one card #}
+{# so the admin doesn't have to click away. #}
+{# ===================================================== #}
+
+{% block admin_content %}
+
+<div class="admin-page-header">
+    <h1>Customer Orders</h1>
+    <p>View all orders and update their status</p>
+</div>
+
+<div class="admin-orders-list">
+
+    {% for order in orders %}
+    <div class="admin-order-card">
+
+        {# --- Header: Cake Name & Current Status --- #}
+        <div class="admin-order-header">
+            <div>
+                <h3>{{ order.cake.name|default:"Deleted Cake" }}</h3>
+                <p class="admin-order-meta">
+                    Order ORD-{{ order.id|stringformat:"03d" }} •
+                    Placed on {{ order.created_at|date:"Y-m-d" }}
+                </p>
+            </div>
+            <span class="status-pill 
+                {% if order.status == 'pending' %}status-pending
+                {% elif order.status == 'confirmed' %}status-approved
+                {% elif order.status == 'cancelled' %}status-rejected
+                {% elif order.status == 'delivered' %}status-approved
+                {% endif %}">
+                {{ order.get_status_display }}
+            </span>
+        </div>
+
+        {# --- Body: Grid with Details --- #}
+        <div class="admin-order-body">
+
+            {# --- TOP ROW: Order Info + Customer Info --- #}
+            <div class="admin-order-top-row">
+
+                {# Column 1: Size, Date, Total #}
+                <div class="order-info-col">
+                    <span class="request-label">SIZE</span>
+                    <p>{{ order.size }}</p>
+
+                    <span class="request-label">ORDER DATE</span>
+                    <p>{{ order.created_at|date:"Y-m-d" }}</p>
+
+                    <span class="request-label">TOTAL</span>
+                    <p style="font-size: 18px; font-weight: bold;">Rs {{ order.total_price|floatformat:0 }}</p>
+                </div>
+
+                {# Column 2: Customer Details (Name, Phone, Address) #}
+                <div class="customer-info-col">
+                    <span class="request-label">CUSTOMER</span>
+                    <p style="font-weight: bold; font-size: 15px; margin-bottom: 4px;">
+                        {{ order.customer.profile.full_name|default:order.customer.username }}
+                    </p>
+
+                    <span class="request-label">PHONE</span>
+                    <p style="margin-bottom: 4px;">📞 {{ order.phone_number|default:"Not provided" }}</p>
+
+                    <span class="request-label">DELIVERY ADDRESS</span>
+                    <p style="font-size: 12px; line-height: 1.4; color: #6a5445;">
+                        {{ order.delivery_address|default:"No address provided" }}
+                    </p>
+                </div>
+            </div>
+
+            {# --- BOTTOM ROW: Payment Info --- #}
+            <div class="admin-order-payment-row">
+                <span class="request-label">PAYMENT METHOD</span>
+
+                {% if order.payment_method == 'cod' %}
+                <p><strong>💵 Cash on Delivery</strong> (Pay later)</p>
+                {% elif order.payment_method == 'mcb_juice' %}
+                <p><strong>💳 MCB Juice</strong></p>
+                <span class="request-label">PAYMENT REFERENCE</span>
+                <p class="payment-reference-box">
+                    {{ order.payment_reference|default:"No reference provided" }}
+                </p>
+                {% elif order.payment_method == 'bank_transfer' %}
+                <p><strong>🏦 Bank Transfer</strong></p>
+                <span class="request-label">PAYMENT REFERENCE</span>
+                <p class="payment-reference-box">
+                    {{ order.payment_reference|default:"No reference provided" }}
+                </p>
+                {% endif %}
+            </div>
+
+            {# --- Status Update Buttons --- #}
+            <div class="admin-order-actions">
+                <p class="request-label" style="margin-bottom: 10px;">UPDATE STATUS:</p>
+                <form method="POST" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                    <button type="submit" name="status" value="confirmed"
+                        class="status-btn {% if order.status == 'confirmed' %}active{% endif %}">Confirmed</button>
+                    <button type="submit" name="status" value="baking"
+                        class="status-btn {% if order.status == 'baking' %}active{% endif %}">In Production</button>
+                    <button type="submit" name="status" value="ready"
+                        class="status-btn {% if order.status == 'ready' %}active{% endif %}">Ready</button>
+                    <button type="submit" name="status" value="delivered"
+                        class="status-btn {% if order.status == 'delivered' %}active{% endif %}">Delivered</button>
+                    <button type="submit" name="status" value="cancelled"
+                        class="status-btn {% if order.status == 'cancelled' %}active{% endif %}">Cancelled</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+    <div class="admin-table-container">
+        <p style="text-align:center; padding:40px; color:#a89786;">No customer orders found.</p>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
