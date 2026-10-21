@@ -77,25 +77,48 @@
                         
                         {# MCB Juice option #}
                         <label class="payment-option">
-                            <input type="radio" name="payment_method" value="mcb_juice" checked>
+                            <input type="radio" name="payment_method" value="mcb_juice" checked onchange="toggleReferenceField()">
                             <div class="payment-info">
                                 <strong>💳 MCB Juice</strong>
-                                <small>Pay securely using Juice by MCB</small>
+                                <small>Pay securely to <strong>+230 5 1234567</strong> (Ti Gato Gro Plaizir)</small>
+                            </div>
+                        </label>
+                        
+                        {# Bank Transfer option #}
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="bank_transfer" onchange="toggleReferenceField()">
+                            <div class="payment-info">
+                                <strong>🏦 Bank Transfer</strong>
+                                <small>Transfer to MCB Account: 000 123 456 789</small>
                             </div>
                         </label>
                         
                         {# Cash on Delivery option #}
                         <label class="payment-option">
-                            <input type="radio" name="payment_method" value="cod">
+                            <input type="radio" name="payment_method" value="cod" onchange="toggleReferenceField()">
                             <div class="payment-info">
                                 <strong>💵 Cash on Delivery</strong>
                                 <small>Pay when you receive your cake</small>
                             </div>
                         </label>
                     </div>
+
+                    {# --- Payment Reference Box (Hidden by default) --- #}
+                    <div id="reference-box" style="display: block; margin-top: 15px; background: #fdfaf5; padding: 15px; border-radius: 8px; border: 1px dashed #d19a7a;">
+                        <label class="option-label" style="margin-bottom: 5px;">PAYMENT REFERENCE</label>
+                        <p style="font-size: 12px; color: #6a5445; margin-bottom: 10px;">
+                            Please enter the Reference ID from your MCB Juice transaction (e.g., JUI123456) or Bank Transfer.
+                        </p>
+                        <input type="text" name="payment_reference" id="payment_reference_input" placeholder="e.g. JUI123456" style="width: 100%; padding: 10px; border: 1px solid #e0d5c5; border-radius: 6px;">
+                    </div>
                     
+                    {# --- Important Info Box --- #}
+                    <div style="background: #f4ead5; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 12px; color: #6a5445; border-left: 4px solid #d19a7a;">
+                        <strong>ℹ️ Important:</strong> Orders will only be confirmed once payment has been received.
+                    </div>
+
                     {# --- Submit Button --- #}
-                    <button type="submit" class="order-btn" style="border:none; cursor:pointer; width:100%;">
+                    <button type="submit" class="order-btn" style="border:none; cursor:pointer; width:100%; margin-top: 20px;">
                         Place Order
                     </button>
                 </form>
@@ -153,6 +176,33 @@ function selectSize(element) {
     document.getElementById('form-size').value = sizeText;
     document.getElementById('form-price').value = total.toFixed(2);
 }
+</script>
+
+<script>
+// =====================================================
+// TOGGLE PAYMENT REFERENCE FIELD
+// Shows the reference box only if MCB Juice or Bank Transfer is selected.
+// Also makes the field 'required' for those methods.
+// =====================================================
+function toggleReferenceField() {
+    const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    const referenceBox = document.getElementById('reference-box');
+    const referenceInput = document.getElementById('payment_reference_input');
+
+    if (selectedMethod === 'mcb_juice' || selectedMethod === 'bank_transfer') {
+        referenceBox.style.display = 'block';
+        referenceInput.required = true; // <-- This makes it mandatory
+    } else {
+        referenceBox.style.display = 'none';
+        referenceInput.required = false;
+        referenceInput.value = ''; // Clear it if they switch to COD
+    }
+}
+
+// Run once on page load to set the initial state
+document.addEventListener("DOMContentLoaded", function() {
+    toggleReferenceField();
+});
 </script>
 
 {% endblock %}

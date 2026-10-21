@@ -19,10 +19,66 @@ def our_cakes(request):
     cakes = Cake.objects.all()
     return render(request, 'bakery/our_cakes.html', {'cakes': cakes})
 
+# =====================================================
+# CAKE DETAIL VIEW
+# Shows one cake + handles the standard order submission
+# =====================================================
 def cake_detail(request, cake_id):
     cake = get_object_or_404(Cake, pk=cake_id)
+    
+    # ---------- HANDLE ORDER SUBMISSION ----------
+    if request.method == 'POST' and request.user.is_authenticated:
+        # Get the form data
+        size = request.POST.get('size', 'Small (6")')
+        total_price = request.POST.get('total_price')
+        payment_method = request.POST.get('payment_method', 'cod')
+        payment_reference = request.POST.get('payment_reference', '').strip()
+        
+        # ---------- SERVER-SIDE VALIDATION ----------
+        # If they chose MCB Juice or Bank Transfer, they MUST provide a reference.
+        if payment_method in ['mcb_juice', 'bank_transfer'] and not payment_reference:
+            messages.error(
+                request, 
+                "Please provide your payment reference code for MCB Juice or Bank Transfer."
+            )
+            return redirect('cake_detail', cake_id=cake.id)
+        
+        # Get the user's profile for delivery info
+        try:
+            profile = request.user.profile
+            delivery_address = profile.delivery_address
+            phone_number = profile.phone_number
+        except Profile.DoesNotExist:
+            delivery_address = ''
+            phone_number = ''
+        
+        # Create the order in the database
+        order = Order.objects.create(
+            customer=request.user,
+            cake=cake,
+            size=size,
+            total_price=total_price,
+            payment_method=payment_method,
+            payment_reference=payment_reference,
+            delivery_address=delivery_address,
+            phone_number=phone_number,
+            status='pending',
+        )
+        
+        messages.success(
+            request,
+            f"🎉 Your order #{order.id} for '{cake.name}' has been placed! "
+            f"We will confirm your payment and start baking soon."
+        )
+        
+        return redirect('cake_detail', cake_id=cake.id)
+    
+    # ---------- SHOW THE PAGE ----------
     return render(request, 'bakery/cake_detail.html', {'cake': cake})
 
+# =====================================================
+# ABOUT US
+# =====================================================
 def about_us(request):
     return render(request, 'bakery/about_us.html')
 
@@ -46,7 +102,7 @@ def signup(request):
 # =====================================================
 # CUSTOM LOGIN VIEW
 # Handles both customers and admins.
-# Shows a personalised welcome message, and gracefully
+# Shows a personalised welcome message.
 # handles users who don't have a Profile yet (e.g. admins).
 # =====================================================
 class CustomLoginView(LoginView):
