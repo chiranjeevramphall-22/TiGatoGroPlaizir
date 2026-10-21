@@ -26,4 +26,9 @@ urlpatterns = [
     path('admin-customisation-options/<int:option_id>/delete/', views.admin_customisation_option_delete, name='admin_customisation_option_delete'),
     path('admin-custom-requests/', views.admin_custom_requests, name='admin_custom_requests'),
     path('admin-orders/', views.admin_orders, name='admin_orders'),
+
+    # Profile panel
+    path('my-profile/', views.my_profile, name='my_profile'),
+    path('current-orders/', views.my_profile, name='current_orders'), 
+    path('order-history/', views.my_profile, name='order_history'),
 ]

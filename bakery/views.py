@@ -481,3 +481,55 @@ def admin_orders(request):
         'active_page': 'orders',
     }
     return render(request, 'bakery/admin_orders.html', context)
+
+# =====================================================
+# CUSTOMER PROFILE VIEW
+# Shows the user's personal details and handles editing.
+# =====================================================
+from django.contrib.auth.decorators import login_required
+
+@login_required(login_url='login')
+def my_profile(request):
+    user = request.user
+    
+    # ---------- HANDLE EDIT PROFILE SUBMISSION ----------
+    if request.method == 'POST':
+        # Get the data from the form
+        full_name = request.POST.get('full_name', '')
+        email = request.POST.get('email', '')
+        phone_number = request.POST.get('phone_number', '')
+        delivery_address = request.POST.get('delivery_address', '')
+        
+        # Update the User model (Email)
+        user.email = email
+        user.save()
+        
+        # Update the Profile model
+        profile = user.profile
+        profile.full_name = full_name
+        profile.phone_number = phone_number
+        profile.delivery_address = delivery_address
+        profile.save()
+        
+        messages.success(request, "Your profile has been updated successfully! ✅")
+        return redirect('my_profile')
+
+    # ---------- SHOW THE PAGE ----------
+    # Count current orders
+    current_orders_count = Order.objects.filter(
+        customer=user, 
+        status__in=['pending', 'confirmed', 'baking', 'ready']
+    ).count()
+    
+    # Count history
+    history_count = Order.objects.filter(
+        customer=user, 
+        status__in=['delivered', 'cancelled']
+    ).count()
+    
+    context = {
+        'active_page': 'profile',
+        'current_orders_count': current_orders_count,
+        'history_count': history_count,
+    }
+    return render(request, 'bakery/my_profile.html', context)

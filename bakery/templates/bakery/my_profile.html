@@ -1,0 +1,84 @@
+{% extends 'bakery/profile_base.html' %}
+{% load static %}
+
+{% block profile_content %}
+
+{# --- Form submits to the same view to save changes --- #}
+<form method="POST" id="profileForm">
+    {% csrf_token %}
+
+    <div class="profile-header-row">
+        <div>
+            <span class="section-label">ACCOUNT</span>
+            <h1>My Profile</h1>
+        </div>
+        
+        {# Button toggles between Edit and Save #}
+        <button type="button" id="editProfileBtn" class="btn-edit-profile">Edit Profile</button>
+        <button type="submit" id="saveProfileBtn" class="btn-save-profile" style="display: none;">Save Changes</button>
+    </div>
+
+    <div class="profile-details-box">
+        <div class="profile-detail-grid">
+            
+            {# Username (Not editable) #}
+            <div class="detail-item">
+                <span class="request-label">USERNAME</span>
+                <p>{{ user.username }}</p>
+            </div>
+            
+            {# Full Name #}
+            <div class="detail-item">
+                <span class="request-label">FULL NAME</span>
+                <p class="view-mode-text">{{ user.profile.full_name|default:"Not provided" }}</p>
+                <input type="text" name="full_name" class="edit-mode-input" value="{{ user.profile.full_name }}" style="display: none;">
+            </div>
+            
+            {# Email #}
+            <div class="detail-item">
+                <span class="request-label">EMAIL ADDRESS</span>
+                <p class="view-mode-text">{{ user.email|default:"Not provided" }}</p>
+                <input type="email" name="email" class="edit-mode-input" value="{{ user.email }}" style="display: none;">
+            </div>
+            
+            {# Phone Number #}
+            <div class="detail-item">
+                <span class="request-label">PHONE NUMBER</span>
+                <p class="view-mode-text">{{ user.profile.phone_number|default:"Not provided" }}</p>
+                <input type="text" name="phone_number" class="edit-mode-input" value="{{ user.profile.phone_number }}" style="display: none;">
+            </div>
+            
+            {# Delivery Address #}
+            <div class="detail-item" style="grid-column: 1 / -1;">
+                <span class="request-label">DELIVERY ADDRESS</span>
+                <p class="view-mode-text">{{ user.profile.delivery_address|default:"Not provided" }}</p>
+                <textarea name="delivery_address" class="edit-mode-input" rows="3" style="display: none;">{{ user.profile.delivery_address }}</textarea>
+            </div>
+            
+        </div>
+    </div>
+</form>
+
+{# --- JavaScript to toggle Edit Mode --- #}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const editBtn = document.getElementById('editProfileBtn');
+    const saveBtn = document.getElementById('saveProfileBtn');
+    const viewTexts = document.querySelectorAll('.view-mode-text');
+    const editInputs = document.querySelectorAll('.edit-mode-input');
+
+    editBtn.addEventListener('click', function() {
+        // Hide the read-only text
+        viewTexts.forEach(el => el.style.display = 'none');
+        
+        // Show the editable inputs
+        editInputs.forEach(el => el.style.display = 'block');
+        
+        // Switch the buttons
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'block';
+    });
+});
+</script>
+
+{% endblock %}

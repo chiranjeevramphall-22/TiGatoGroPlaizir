@@ -1,0 +1,49 @@
+{% extends 'bakery/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="profile-layout">
+
+    {# ============ LEFT SIDEBAR ============ #}
+    <aside class="profile-sidebar">
+        
+        {# User Avatar (Using the first letter of their name) #}
+        <div class="profile-avatar-card">
+            <div class="avatar-circle">
+                {{ user.username|first|upper }}
+            </div>
+            <h3>{{ user.profile.full_name|default:user.username }}</h3>
+            <p>@{{ user.username }}</p>
+            <span class="role-badge">Customer</span>
+        </div>
+
+        {# Navigation Links #}
+        <nav class="profile-nav">
+            <a href="{% url 'my_profile' %}" class="profile-nav-link {% if active_page == 'profile' %}active{% endif %}">
+                My Profile
+            </a>
+            <a href="{% url 'current_orders' %}" class="profile-nav-link {% if active_page == 'orders' %}active{% endif %}">
+                Current Orders <span class="badge-count">{{ current_orders_count|default:"0" }}</span>
+            </a>
+            <a href="{% url 'order_history' %}" class="profile-nav-link {% if active_page == 'history' %}active{% endif %}">
+                Order History <span class="badge-count">{{ history_count|default:"0" }}</span>
+            </a>
+        </nav>
+
+        {# Footer Link #}
+        <div class="profile-sidebar-footer">
+            <a href="{% url 'home' %}">← Back to Website</a>
+        </div>
+    </aside>
+
+    {# ============ MAIN CONTENT AREA ============ #}
+    <main class="profile-content">
+        {% block profile_content %}
+        <!-- Each profile page will fill this block -->
+        {% endblock %}
+    </main>
+
+</div>
+
+{% endblock %}
