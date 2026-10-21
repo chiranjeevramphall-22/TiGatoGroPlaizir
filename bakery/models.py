@@ -104,6 +104,18 @@ class Order(models.Model):
     payment_reference = models.CharField(max_length=100, blank=True, help_text="Reference ID from MCB Juice or Bank Transfer")
     bank_name = models.CharField(max_length=100, blank=True, help_text="If paid by Bank Transfer")
 
+    # ---------- FULFILMENT METHOD ----------
+    FULFILMENT_CHOICES = [
+        ('pickup', 'Pick Up'),
+        ('delivery', 'Delivery'),
+    ]
+    fulfilment_method = models.CharField(
+        max_length=20, 
+        choices=FULFILMENT_CHOICES, 
+        default='pickup',
+        help_text="Did the customer choose Pick Up or Delivery?"
+    )
+
 # =====================================================
 # CUSTOMISATION OPTION MODEL
 # Stores every size, flavour, filling, frosting and

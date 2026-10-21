@@ -2,9 +2,9 @@
 {% load static %}
 
 {# ===================================================== #}
-{# ADMIN: CUSTOMER ORDERS PAGE #}
-{# Shows all standard orders with all info on one card #}
-{# so the admin doesn't have to click away. #}
+{# ADMIN: CUSTOMER ORDERS PAGE                           #}
+{# Shows all standard orders with all info on one card   #}
+{# so the admin doesn't have to click away.              #}
 {# ===================================================== #}
 
 {% block admin_content %}
@@ -44,10 +44,20 @@
             {# --- TOP ROW: Order Info + Customer Info --- #}
             <div class="admin-order-top-row">
 
-                {# Column 1: Size, Date, Total #}
+                {# Column 1: Size, Fulfilment, Date, Total #}
                 <div class="order-info-col">
                     <span class="request-label">SIZE</span>
                     <p>{{ order.size }}</p>
+
+                    {# --- NEW: FULFILMENT METHOD --- #}
+                    <span class="request-label">FULFILMENT</span>
+                    <p style="font-weight: bold;">
+                        {% if order.fulfilment_method == 'delivery' %}
+                            🚚 Delivery (+Rs 150)
+                        {% else %}
+                            🏪 Pick Up
+                        {% endif %}
+                    </p>
 
                     <span class="request-label">ORDER DATE</span>
                     <p>{{ order.created_at|date:"Y-m-d" }}</p>
@@ -68,7 +78,11 @@
 
                     <span class="request-label">DELIVERY ADDRESS</span>
                     <p style="font-size: 12px; line-height: 1.4; color: #6a5445;">
-                        {{ order.delivery_address|default:"No address provided" }}
+                        {% if order.fulfilment_method == 'pickup' %}
+                            <em>Customer will pick up from the store.</em>
+                        {% else %}
+                            {{ order.delivery_address|default:"No address provided" }}
+                        {% endif %}
                     </p>
                 </div>
             </div>

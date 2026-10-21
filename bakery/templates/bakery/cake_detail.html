@@ -112,6 +112,29 @@
                         <input type="text" name="payment_reference" id="payment_reference_input" placeholder="e.g. JUI123456" style="width: 100%; padding: 10px; border: 1px solid #e0d5c5; border-radius: 6px;">
                     </div>
                     
+                    {# --- Fulfilment Method (Pick Up or Delivery) --- #}
+                    <div style="margin-top: 20px; background: #fdfaf5; padding: 15px; border-radius: 8px; border: 1px solid #e0d5c5;">
+                        <label class="option-label" style="margin-bottom: 10px; display: block;">HOW WOULD YOU LIKE TO RECEIVE YOUR CAKE?</label>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <label class="payment-option" style="flex: 1; padding: 10px;">
+                                <input type="radio" name="fulfilment_method" value="pickup" checked onchange="updateTotalWithFulfilment()">
+                                <div class="payment-info">
+                                    <strong>🏪 Pick Up</strong>
+                                    <small>Free - From our location</small>
+                                </div>
+                            </label>
+                            
+                            <label class="payment-option" style="flex: 1; padding: 10px;">
+                                <input type="radio" name="fulfilment_method" value="delivery" onchange="updateTotalWithFulfilment()">
+                                <div class="payment-info">
+                                    <strong>🚚 Delivery</strong>
+                                    <small>+Rs 150 fee</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     {# --- Important Info Box --- #}
                     <div style="background: #f4ead5; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 12px; color: #6a5445; border-left: 4px solid #d19a7a;">
                         <strong>ℹ️ Important:</strong> Orders will only be confirmed once payment has been received.
@@ -147,6 +170,7 @@
     </div>
 
 </section>
+
 
 <script>
 // =====================================================
@@ -206,3 +230,95 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 {% endblock %}
+
+<script>
+// =====================================================
+// GLOBAL VARIABLES
+// Keep track of the base price and the delivery fee
+// =====================================================
+let currentBasePrice = parseFloat("{{ cake.base_price }}");
+let currentSizeExtra = 0;
+let currentDeliveryFee = 0;
+
+// =====================================================
+// SELECT SIZE
+// Updates the 'selected' box, recalculates the price.
+// =====================================================
+function selectSize(element) {
+    // 1. Remove 'selected' from all size options
+    document.querySelectorAll('.size-option').forEach(function(opt) {
+        opt.classList.remove('selected');
+    });
+
+    // 2. Add 'selected' to the clicked option
+    element.classList.add('selected');
+
+    // 3. Get the extra cost of this size
+    currentSizeExtra = parseFloat(element.dataset.price);
+
+    // 4. Recalculate and update
+    updateTotalPrice();
+
+    // 5. Update the HIDDEN form field for size
+    const sizeText = element.querySelector('strong').innerText;
+    document.getElementById('form-size').value = sizeText;
+}
+
+// =====================================================
+// UPDATE FULFILMENT METHOD (Pick Up vs Delivery)
+// =====================================================
+function updateTotalWithFulfilment() {
+    const selectedMethod = document.querySelector('input[name="fulfilment_method"]:checked').value;
+    
+    if (selectedMethod === 'delivery') {
+        currentDeliveryFee = 150;
+    } else {
+        currentDeliveryFee = 0;
+    }
+    
+    updateTotalPrice();
+}
+
+// =====================================================
+// UPDATE TOTAL PRICE
+// Calculates Base + Size Extra + Delivery Fee
+// =====================================================
+function updateTotalPrice() {
+    const total = currentBasePrice + currentSizeExtra + currentDeliveryFee;
+    
+    // Update the visual display
+    document.getElementById('total-price').innerText = 'Rs ' + total.toFixed(2);
+    
+    // Update the hidden form field so the correct price is saved
+    document.getElementById('form-price').value = total.toFixed(2);
+}
+
+// =====================================================
+// TOGGLE PAYMENT REFERENCE FIELD
+// =====================================================
+function toggleReferenceField() {
+    const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    const referenceBox = document.getElementById('reference-box');
+    const referenceInput = document.getElementById('payment_reference_input');
+
+    if (selectedMethod === 'mcb_juice' || selectedMethod === 'bank_transfer') {
+        referenceBox.style.display = 'block';
+        referenceInput.required = true;
+    } else {
+        referenceBox.style.display = 'none';
+        referenceInput.required = false;
+        referenceInput.value = '';
+    }
+}
+
+// Run once on page load to set the initial states
+document.addEventListener("DOMContentLoaded", function() {
+    toggleReferenceField();
+    // Make sure the initial size (Small) is included in the price
+    const initialSize = document.querySelector('.size-option.selected');
+    if (initialSize) {
+        currentSizeExtra = parseFloat(initialSize.dataset.price);
+    }
+    updateTotalPrice();
+});
+</script>

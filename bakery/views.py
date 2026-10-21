@@ -33,9 +33,9 @@ def cake_detail(request, cake_id):
         total_price = request.POST.get('total_price')
         payment_method = request.POST.get('payment_method', 'cod')
         payment_reference = request.POST.get('payment_reference', '').strip()
+        fulfilment_method = request.POST.get('fulfilment_method', 'pickup') 
         
         # ---------- SERVER-SIDE VALIDATION ----------
-        # If they chose MCB Juice or Bank Transfer, they MUST provide a reference.
         if payment_method in ['mcb_juice', 'bank_transfer'] and not payment_reference:
             messages.error(
                 request, 
@@ -60,6 +60,7 @@ def cake_detail(request, cake_id):
             total_price=total_price,
             payment_method=payment_method,
             payment_reference=payment_reference,
+            fulfilment_method=fulfilment_method,  
             delivery_address=delivery_address,
             phone_number=phone_number,
             status='pending',
