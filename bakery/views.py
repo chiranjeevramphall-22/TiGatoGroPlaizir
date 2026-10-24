@@ -534,3 +534,53 @@ def my_profile(request):
         'history_count': history_count,
     }
     return render(request, 'bakery/my_profile.html', context)
+
+# =====================================================
+# CUSTOMER PROFILE: CURRENT ORDERS PAGE
+# Shows the customer's active orders (not yet delivered
+# or cancelled) with a progress tracker for each one.
+# @k.d
+# =====================================================
+@login_required(login_url='login')
+def current_orders(request):
+    user = request.user
+
+    orders = list(
+        Order.objects.filter(
+            customer=user,
+            status__in=['pending', 'confirmed', 'baking', 'ready']
+        ).select_related('cake').order_by('-created_at')
+    )
+ 
+    stage_reached = {'pending': 0, 'confirmed': 1, 'baking': 2, 'ready': 3}
+ 
+    status_labels = {
+        'pending': 'Awaiting payment',
+        'confirmed': 'Confirmed',
+        'baking': 'Preparing',
+        'ready': 'Ready',
+    }
+ 
+    for order in orders:
+        reached = stage_reached[order.status]
+        last_step = 'Ready for pickup' if order.fulfilment_method == 'pickup' else 'Ready for delivery'
+        labels = ['Confirmed', 'Baking', last_step]
+ 
+        order.status_label = status_labels[order.status]
+        order.progress = [
+            {'label': labels[i], 'done': reached > i}
+            for i in range(3)
+        ]
+ 
+    history_count = Order.objects.filter(
+        customer=user,
+        status__in=['delivered', 'cancelled']
+    ).count()
+ 
+    context = {
+        'active_page': 'orders',
+        'orders': orders,
+        'current_orders_count': len(orders),
+        'history_count': history_count,
+    }
+    return render(request, 'bakery/current_orders.html', context)

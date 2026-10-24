@@ -15,7 +15,7 @@
             </div>
             <h3>{{ user.profile.full_name|default:user.username }}</h3>
             <p>@{{ user.username }}</p>
-            <span class="role-badge">Customer</span>
+            <span class="role-badge">{% if user.is_staff %}Admin{% else %}Customer{% endif %}</span>
         </div>
 
         {# Navigation Links #}

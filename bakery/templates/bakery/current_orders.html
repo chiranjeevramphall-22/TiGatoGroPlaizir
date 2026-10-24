@@ -1,0 +1,176 @@
+{% extends 'bakery/profile_base.html' %}
+ 
+{# ===================================================== #}
+{# CUSTOMER PROFILE: CURRENT ORDERS                      #}
+{# Left: the customer's active orders with a tracker.    #}
+{# Right: how to pay (information only).                 #}
+{# ===================================================== #}
+ 
+{% block profile_content %}
+ 
+<div class="orders-layout">
+ 
+    {# ============ ORDERS COLUMN ============ #}
+    <section class="orders-column">
+ 
+        <div class="orders-header">
+            <div>
+                <span class="section-label">ORDERS</span>
+                <h1>Current Orders</h1>
+                <p class="orders-subtitle">Track your active cake orders and pickup details.</p>
+            </div>
+            <span class="active-orders-pill">{{ orders|length }} Active Order{{ orders|length|pluralize }}</span>
+        </div>
+ 
+        {% for order in orders %}
+        <article class="order-card">
+ 
+            <div class="order-card-top">
+                <div>
+                    <span class="order-ref">ORDER #TG-{{ order.id }}</span>
+                    <h2>{% if order.is_custom %}Custom Cake{% else %}{{ order.cake.name|default:"Cake order" }}{% endif %}</h2>
+                </div>
+                <span class="order-status-pill">{{ order.status_label }}</span>
+            </div>
+ 
+            <div class="order-info-grid">
+                <div>
+                    <span class="order-info-label">CAKE DETAILS</span>
+                    {% if order.is_custom %}
+                        <p>{{ order.custom_size|default:"Custom size" }}{% if order.custom_flavour %} · {{ order.custom_flavour }}{% endif %}</p>
+                        {% if order.custom_filling or order.custom_frosting %}
+                            <p>{{ order.custom_filling }}{% if order.custom_filling and order.custom_frosting %} · {% endif %}{{ order.custom_frosting }}</p>
+                        {% endif %}
+                    {% else %}
+                        <p>{{ order.size|default:"Standard size" }}</p>
+                    {% endif %}
+                </div>
+ 
+                <div>
+                    {% if order.fulfilment_method == 'delivery' %}
+                        <span class="order-info-label">DELIVERY</span>
+                        <p>{% if order.required_date %}{{ order.required_date|date:"j M Y" }}{% else %}Date to be confirmed{% endif %}</p>
+                        <p>{{ order.delivery_address|default:"Address to be confirmed"|truncatechars:60 }}</p>
+                    {% else %}
+                        <span class="order-info-label">PICKUP</span>
+                        <p>{% if order.required_date %}{{ order.required_date|date:"j M Y" }}{% else %}Date to be confirmed{% endif %}</p>
+                        <p>Pickup point confirmed by the baker</p>
+                    {% endif %}
+                </div>
+            </div>
+ 
+            <div class="order-progress">
+                <span class="order-info-label">ORDER PROGRESS</span>
+                <div class="progress-steps">
+                    {% for step in order.progress %}
+                    <div class="progress-step">
+                        <span class="progress-dot{% if step.done %} done{% endif %}"></span>
+                        <span class="progress-label">{{ step.label }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+ 
+            <div class="order-card-bottom">
+                <div>
+                    <span class="order-info-label">TOTAL</span>
+                    <p class="order-total">{% if order.total_price %}Rs {{ order.total_price|floatformat:"0g" }}{% else %}To be confirmed{% endif %}</p>
+                </div>
+                <div class="order-buttons">
+                    <a href="tel:+23057012767" class="btn-order-light">Contact Us</a>
+                    <button type="button" class="btn-order-dark" onclick="toggleOrderDetails(this)">View Order</button>
+                </div>
+            </div>
+ 
+            {# Opens when "View Order" is clicked #}
+            <div class="order-details" hidden>
+                <div class="order-detail-row"><span>Placed on</span><strong>{{ order.created_at|date:"j M Y, H:i" }}</strong></div>
+                <div class="order-detail-row"><span>Payment</span>
+                    <strong>
+                        {% if order.payment_method == 'cod' %}Cash on Delivery
+                        {% elif order.payment_method == 'mcb_juice' %}MCB Juice
+                        {% elif order.payment_method == 'bank_transfer' %}Bank Transfer
+                        {% else %}To be discussed with the baker{% endif %}
+                    </strong>
+                </div>
+                {% if order.payment_reference %}
+                <div class="order-detail-row"><span>Payment reference</span><strong>{{ order.payment_reference }}</strong></div>
+                {% endif %}
+                <div class="order-detail-row"><span>Method</span><strong>{% if order.fulfilment_method == 'delivery' %}Delivery{% else %}Pick Up{% endif %}</strong></div>
+                {% if order.phone_number %}
+                <div class="order-detail-row"><span>Phone</span><strong>{{ order.phone_number }}</strong></div>
+                {% endif %}
+                {% if order.fulfilment_method == 'delivery' and order.delivery_address %}
+                <div class="order-detail-row"><span>Address</span><strong>{{ order.delivery_address }}</strong></div>
+                {% endif %}
+                {% if order.personalised_message %}
+                <div class="order-detail-row"><span>Message on cake</span><strong>{{ order.personalised_message }}</strong></div>
+                {% endif %}
+                {% if order.customer_notes %}
+                <div class="order-detail-row"><span>Your notes</span><strong>{{ order.customer_notes }}</strong></div>
+                {% endif %}
+            </div>
+ 
+        </article>
+        {% empty %}
+        <div class="orders-empty">
+            <h2>No active orders</h2>
+            <p>When you place an order, you can follow it here.</p>
+            <a href="{% url 'our_cakes' %}" class="btn-order-dark">Browse Our Cakes</a>
+        </div>
+        {% endfor %}
+ 
+        {% if orders %}
+        <p class="orders-footnote">We'll update this page as your order moves through each stage.</p>
+        {% endif %}
+    </section>
+ 
+    {# ============ PAYMENT METHODS COLUMN ============ #}
+    <aside class="payment-panel">
+        <h2>Payment Methods</h2>
+        <p class="payment-panel-sub">Choose how you'd like to complete your payment.</p>
+ 
+        <div class="pay-card">
+            <div class="pay-logo pay-logo-juice">juice</div>
+            <div class="pay-body">
+                <div class="pay-title-row">
+                    <h3>MCB BANK JUICE</h3>
+                    <span class="pay-recommended">Recommended</span>
+                </div>
+                <p>Pay securely using Juice by MCB.</p>
+                <p class="pay-phone">📞 <strong>(+230 57012767)</strong></p>
+                <p class="pay-note">Make payment via Juice to confirm your order. Once received, your order will be processed.</p>
+            </div>
+            <span class="pay-radio selected"></span>
+        </div>
+ 
+        <div class="pay-card">
+            <div class="pay-logo pay-logo-cash">💵</div>
+            <div class="pay-body">
+                <div class="pay-title-row">
+                    <h3>Cash on Delivery</h3>
+                </div>
+                <p>Pay in cash when you receive your order anywhere across Mauritius.</p>
+                <p class="pay-fee">🚚 Rs 150 Delivery fee applies</p>
+            </div>
+            <span class="pay-radio"></span>
+        </div>
+ 
+        <div class="pay-important">
+            <strong>ⓘ Important</strong>
+            <p>Orders will only be confirmed once payment has been received. Thank you for choosing Ti Gato Gro Plaizir!</p>
+        </div>
+    </aside>
+ 
+</div>
+ 
+<script>
+    // Show or hide the extra order details under a card
+    function toggleOrderDetails(button) {
+        const details = button.closest('.order-card').querySelector('.order-details');
+        details.hidden = !details.hidden;
+        button.textContent = details.hidden ? 'View Order' : 'Hide Order';
+    }
+</script>
+ 
+{% endblock %}
