@@ -2786,3 +2786,63 @@ button.tag.selected {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===================================================== */
+/* CURRENT ORDERS: SINGLE COLUMN + CONTACT INFO          */
+/* ===================================================== */
+
+/* Force the orders layout to a single full-width column */
+.orders-layout {
+    display: block;
+}
+
+/* Remove the max-width limit so cards stretch nicely */
+.orders-column {
+    max-width: 100%;
+}
+
+/* Full-width order card */
+.order-card {
+    width: 100%;
+}
+
+/* Contact info block shown inside "View Order" details */
+.order-contact-info {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f4ead5;
+    border-radius: 8px;
+    border-left: 3px solid #d19a7a;
+}
+
+.order-contact-info p {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #2b1d16;
+    font-family: 'Georgia', serif;
+}
+
+/* Slightly wider progress labels spacing in single column */
+.order-card .order-info-grid {
+    gap: 30px;
+}
+
+.order-contact-box {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f4ead5;
+    border-radius: 8px;
+    border-left: 3px solid #d19a7a;
+}
+
+.order-contact-box p {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #2b1d16;
+    font-family: 'Georgia', serif;
+}
+
+.order-contact-box .order-info-label {
+    margin-bottom: 8px;
+    display: block;
+}
