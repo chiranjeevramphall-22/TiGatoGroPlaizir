@@ -1,0 +1,87 @@
+{% extends 'bakery/profile_base.html' %}
+
+{# ===================================================== #}
+{# CUSTOMER PROFILE: ORDER HISTORY                       #}
+{# Displays the signed-in customer's delivered and       #}
+{# cancelled orders, with filters and reorder links.     #}
+{# ===================================================== #}
+
+{% block profile_content %}
+
+<section class="history-page">
+    <div class="history-header">
+        <div>
+            <span class="section-label">ORDERS</span>
+            <h1>Order History</h1>
+            <p class="orders-subtitle">Review your completed cake orders and order again anytime.</p>
+        </div>
+        <span class="history-count-pill">
+            {{ history_count }} Past Order{{ history_count|pluralize }}
+        </span>
+    </div>
+
+    <nav class="history-filters" aria-label="Filter order history">
+        <a href="{% url 'order_history' %}"
+           class="history-filter{% if active_filter == 'all' %} active{% endif %}">All</a>
+        <a href="{% url 'order_history' %}?status=delivered"
+           class="history-filter{% if active_filter == 'delivered' %} active{% endif %}">Delivered</a>
+        <a href="{% url 'order_history' %}?status=cancelled"
+           class="history-filter{% if active_filter == 'cancelled' %} active{% endif %}">Cancelled</a>
+    </nav>
+
+    <div class="history-list">
+        {% for order in orders %}
+        <article class="history-card">
+            <div class="history-order-main">
+                <span class="order-ref">ORDER #TG-{{ order.id }}</span>
+                <h2>
+                    {% if order.is_custom %}
+                        {% if order.cake_type %}{{ order.cake_type }}{% else %}Custom Cake{% endif %}
+                    {% else %}
+                        {{ order.cake.name|default:"Cake order" }}
+                    {% endif %}
+                </h2>
+                <p class="history-meta">
+                    {{ order.updated_at|date:"j M Y" }} ·
+                    {% if order.status == 'delivered' %}
+                        {% if order.fulfilment_method == 'delivery' %}Delivery completed{% else %}Pickup completed{% endif %}
+                    {% else %}
+                        Order cancelled
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="history-total">
+                <span class="order-info-label">TOTAL</span>
+                <strong>{% if order.total_price %}Rs {{ order.total_price|floatformat:"0g" }}{% else %}Not available{% endif %}</strong>
+            </div>
+
+            <div class="history-actions">
+                <span class="history-status {{ order.status }}">{{ order.get_status_display }}</span>
+                {% if order.is_custom or not order.cake %}
+                    <a href="{% url 'customise' %}" class="history-reorder">Reorder</a>
+                {% else %}
+                    <a href="{% url 'cake_detail' order.cake.id %}" class="history-reorder">Reorder</a>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <div class="orders-empty history-empty">
+            <h2>No past orders found</h2>
+            {% if active_filter == 'all' %}
+                <p>Your delivered and cancelled orders will appear here.</p>
+            {% else %}
+                <p>You do not have any {{ active_filter }} orders.</p>
+                <a href="{% url 'order_history' %}" class="btn-order-light">Show All Orders</a>
+            {% endif %}
+            <a href="{% url 'our_cakes' %}" class="btn-order-dark">Browse Our Cakes</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if orders %}
+        <p class="orders-footnote">Showing your most recent past orders.</p>
+    {% endif %}
+</section>
+
+{% endblock %}

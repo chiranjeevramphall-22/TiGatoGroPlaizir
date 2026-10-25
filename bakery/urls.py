@@ -30,5 +30,5 @@ urlpatterns = [
     # Profile panel
     path('my-profile/', views.my_profile, name='my_profile'),
     path('current-orders/', views.current_orders, name='current_orders'), 
-    path('order-history/', views.my_profile, name='order_history'),
+    path('order-history/', views.order_history, name='order_history'),
 ]

@@ -584,3 +584,50 @@ def current_orders(request):
         'history_count': history_count,
     }
     return render(request, 'bakery/current_orders.html', context)
+
+
+# =====================================================
+# CUSTOMER PROFILE: ORDER HISTORY PAGE
+# Shows only the logged-in customer's completed or
+# cancelled orders. A status query parameter lets the
+# customer filter the history without exposing another
+# customer's orders.
+# =====================================================
+@login_required(login_url='login')
+def order_history(request):
+    user = request.user
+
+    # Only these two statuses belong in order history.
+    allowed_filters = {'all', 'delivered', 'cancelled'}
+    active_filter = request.GET.get('status', 'all').lower()
+    if active_filter not in allowed_filters:
+        active_filter = 'all'
+
+    history_orders = Order.objects.filter(
+        customer=user,
+        status__in=['delivered', 'cancelled'],
+    ).select_related('cake')
+
+    if active_filter != 'all':
+        history_orders = history_orders.filter(status=active_filter)
+
+    history_orders = history_orders.order_by('-updated_at', '-created_at')
+
+    current_orders_count = Order.objects.filter(
+        customer=user,
+        status__in=['pending', 'confirmed', 'baking', 'ready'],
+    ).count()
+
+    history_count = Order.objects.filter(
+        customer=user,
+        status__in=['delivered', 'cancelled'],
+    ).count()
+
+    context = {
+        'active_page': 'history',
+        'orders': history_orders,
+        'active_filter': active_filter,
+        'current_orders_count': current_orders_count,
+        'history_count': history_count,
+    }
+    return render(request, 'bakery/order_history.html', context)
