@@ -21,5 +21,22 @@
 6. Run database migrations:
    `python manage.py migrate`
 
-7. Start the server:
+7. Load the initial cake data into the database:
+   `python manage.py loaddata cakes.json`
+
+8. Create an Admin account (to access the backend dashboard):
+   `python manage.py createsuperuser`
+   *(Follow the prompts to set a username, email, and password)*
+
+9. Start the server:
    `python manage.py runserver`
+
+10. Open your browser and go to: `http://127.0.0.1:8000/`
+
+## Project Features
+* Customer Registration & Smart Username Suggestions
+* Dynamic Cake Catalogue & Availability Tracking
+* Standard Ordering with Pickup/Delivery & Payment Options
+* Custom Cake Requests with Event Details Modal
+* Real-time Order Status Tracking
+* Admin Dashboard for Orders, Custom Requests & Cake Management
