@@ -32,8 +32,16 @@
 <section class="custom-request-section">
     <p class="section-label" style="color:#d19a7a;">DON'T SEE WHAT YOU'RE AFTER?</p>
     <h2>Request a Custom Cake</h2>
-    <p>We build fully bespoke cakes to your specifications. Create an account to submit a custom cake request.</p>
-    <a href="#" class="custom-request-btn">Sign Up to Order</a>
+
+    {% if user.is_authenticated %}
+        {# For Logged-In Customers #}
+        <p>We build fully bespoke cakes to your specifications. Start designing your dream cake today.</p>
+        <a href="{% url 'customise' %}" class="custom-request-btn">Customise Your Cake</a>
+    {% else %}
+        {# For Guests #}
+        <p>We build fully bespoke cakes to your specifications. Create an account to submit a custom cake request.</p>
+        <a href="{% url 'signup' %}" class="custom-request-btn">Sign Up to Order</a>
+    {% endif %}
 </section>
 
 {% endblock %}

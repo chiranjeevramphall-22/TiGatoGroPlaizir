@@ -174,65 +174,6 @@
 
 <script>
 // =====================================================
-// SELECT SIZE
-// Updates the 'selected' box, the estimated price display,
-// AND the hidden form fields (so they get submitted correctly)
-// =====================================================
-function selectSize(element) {
-    // 1. Remove 'selected' from all size options
-    document.querySelectorAll('.size-option').forEach(function(opt) {
-        opt.classList.remove('selected');
-    });
-
-    // 2. Add 'selected' to the clicked option
-    element.classList.add('selected');
-
-    // 3. Calculate the new price
-    const basePrice = parseFloat("{{ cake.base_price }}");
-    const extraCost = parseFloat(element.dataset.price);
-    const total = basePrice + extraCost;
-
-    // 4. Update the display price
-    document.getElementById('total-price').innerText = 'Rs ' + total.toFixed(2);
-
-    // 5. Update the HIDDEN form fields (so they get submitted with the order)
-    const sizeText = element.querySelector('strong').innerText;  // e.g. "Medium (8")"
-    document.getElementById('form-size').value = sizeText;
-    document.getElementById('form-price').value = total.toFixed(2);
-}
-</script>
-
-<script>
-// =====================================================
-// TOGGLE PAYMENT REFERENCE FIELD
-// Shows the reference box only if MCB Juice or Bank Transfer is selected.
-// Also makes the field 'required' for those methods.
-// =====================================================
-function toggleReferenceField() {
-    const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-    const referenceBox = document.getElementById('reference-box');
-    const referenceInput = document.getElementById('payment_reference_input');
-
-    if (selectedMethod === 'mcb_juice' || selectedMethod === 'bank_transfer') {
-        referenceBox.style.display = 'block';
-        referenceInput.required = true; // <-- This makes it mandatory
-    } else {
-        referenceBox.style.display = 'none';
-        referenceInput.required = false;
-        referenceInput.value = ''; // Clear it if they switch to COD
-    }
-}
-
-// Run once on page load to set the initial state
-document.addEventListener("DOMContentLoaded", function() {
-    toggleReferenceField();
-});
-</script>
-
-{% endblock %}
-
-<script>
-// =====================================================
 // GLOBAL VARIABLES
 // Keep track of the base price and the delivery fee
 // =====================================================
@@ -322,3 +263,4 @@ document.addEventListener("DOMContentLoaded", function() {
     updateTotalPrice();
 });
 </script>
+{% endblock %}
